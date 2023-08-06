@@ -5,82 +5,135 @@ const Tutorial = db.tutorials;
 let lastUpdated;
 let page = 0;
 
-const calc = ( baseUrl ) => {
-  const idx = baseUrl.lastIndexOf("-");
-  baseUrl = baseUrl.slice(6, idx) + "." + baseUrl.slice(idx + 1);
-  return "https://cdn.sanity.io/images/u0v1th4q/production/" + baseUrl + "?rect,0,1830,900&auto=format";
-  //"?rect=0,39,1920,1002&w=640&h=334&auto=format&w=3840&q=75";
-}
-// get data from server
-const grabNewsFromServer = async () => {
+// const calc = ( baseUrl ) => {
+//   const idx = baseUrl.lastIndexOf("-");
+//   baseUrl = baseUrl.slice(6, idx) + "." + baseUrl.slice(idx + 1);
+//   return "https://cdn.sanity.io/images/u0v1th4q/production/" + baseUrl + "?rect,0,1830,900&auto=format";
+//   //"?rect=0,39,1920,1002&w=640&h=334&auto=format&w=3840&q=75";
+// }
+// // get data from server
+// const grabNewsFromServer = async () => {
   
-  await Tutorial.deleteMany();
+//   await Tutorial.deleteMany();
   
-  lastUpdated = Date();
+//   lastUpdated = Date();
 
-  page = 0;
-  setTimeout(getPage, 10);
-}
+//   page = 0;
+//   setTimeout(getPage, 10);
+// }
 
-const getPage = () => {
-  const url = 'https://www.futurepedia.io/api/tools?page=' + page + '&sort=verified';
-  axios.get(url)
-  .then(data => {
-    const responseObject = data.data;
-    console.log("Debug ================================> Received ", page, responseObject.length);
+
+// const getPage = () => {
+//   const url = 'https://www.futurepedia.io/api/tools?page=' + page + '&sort=verified';
+//   axios.get(url)
+//   .then(data => {
+//     const responseObject = data.data;
+//     console.log("Debug ================================> Received ", page, responseObject.length);
     
-    Tutorial.insertMany(responseObject.map( obj => ( {
-      id: obj.id,
-      duplictae: obj.duplicate,
-      favCount: obj.favCount,
-      image: calc(obj.mainImage.asset._ref),
-      pricing: obj.pricing,
-      publishedAt: obj.publishedAt,
-      publishedAt_timestamp: obj.publishedAt_timestamp,
-      reviewCount: obj.reviewStats.reviewCount,
-      reviewScore: obj.reviewStats.reviewScore,
-      socialLinks: obj.socialLinks,
-      sponser: obj.sponsorOfTheDay,
-      startingPrice: obj.startingPrice,
-      status: obj.status,
-      tagsIndex: obj.tagsIndex,
-      toolCategories: obj.toolCategories,
-      toolName: obj.toolName,
-      toolShortDescription: obj.toolShortDescription,
-      verified: obj.verified,
-      verifiedReason: obj.verifiedReason,
-      websiteUrl: obj.websiteUrl,
-    } )));
+//     Tutorial.insertMany(responseObject.map( obj => ( {
+//       id: obj.id,
+//       duplictae: obj.duplicate,
+//       favCount: obj.favCount,
+//       image: calc(obj.mainImage.asset._ref),
+//       pricing: obj.pricing,
+//       publishedAt: obj.publishedAt,
+//       publishedAt_timestamp: obj.publishedAt_timestamp,
+//       reviewCount: obj.reviewStats.reviewCount,
+//       reviewScore: obj.reviewStats.reviewScore,
+//       socialLinks: obj.socialLinks,
+//       sponser: obj.sponsorOfTheDay,
+//       startingPrice: obj.startingPrice,
+//       status: obj.status,
+//       tagsIndex: obj.tagsIndex,
+//       toolCategories: obj.toolCategories,
+//       toolName: obj.toolName,
+//       toolShortDescription: obj.toolShortDescription,
+//       verified: obj.verified,
+//       verifiedReason: obj.verifiedReason,
+//       websiteUrl: obj.websiteUrl,
+//     } )));
 
-    if(responseObject.length == 9){
-      page ++;
-      setTimeout(getPage, 10);
-    } else {
-      console.log("Debug ================================> Grabbing Ended : ", responseObject.length);
-    }
+//     if(responseObject.length == 9){
+//       page ++;
+//       setTimeout(getPage, 10);
+//     } else {
+//       console.log("Debug ================================> Grabbing Ended : ", responseObject.length);
+//     }
       
-  })
-  .catch(error => console.error(error));
+//   })
+//   .catch(error => console.error(error));
 
-}
+// }
 
-//grab data from server on startup
-grabNewsFromServer();
+// //grab data from server on startup
+// grabNewsFromServer();
 
 // Create and Save a new Tutorial
+
+
+// Retrieve all Tutorials from the database.
+// exports.findAll = (req, res) => {
+//   console.log("API Request =========================================> FindAll");
+//   const title = req.query.title;
+//   var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+
+//   Tutorial.find(condition)
+//     .then(data => {
+//       res.send(data);
+//     })
+//     .catch(err => {
+//       res
+//         .status(500)
+//         .send({
+//           message:
+//             err.message || "Some error occurred while retrieving tutorials."
+//         });
+//     });
+// };
+
+// // Find a single Tutorial with an id
+// exports.findOne = (req, res) => {
+//   console.log("API Request =========================================> FindOne");
+//   const now = Date();
+//   if (now - lastUpdated >= 24 * 60 * 60 * 1000){
+//     grabNewsFromServer();
+//   }
+
+//   const limit = req.params.id;
+//   let from = ( lastUpdated == req.lastUpdated
+//               ? Math.max( limit - 9, 0 )
+//               : 0 );
+  
+//   Tutorial.find()
+//     .skip(from)
+//     .limit(limit - from)
+//     .then(data => {
+//       res.send( { data: data, first: from } );
+//     })
+//     .catch(err => {
+//       res
+//         .status(500)
+//         .send("Error");
+//     })
+// };
+
+// Update a Tutorial by the id in the request
 exports.create = (req, res) => {
   console.log("API Request =========================================> Create");
   // Validate request
-  if (!req.body.title) {
-    res.status(400).send({ message: "Content can not be empty!" });
-    return;
-  }
-
+  // if (!req.body.title) {
+  //   res.status(400).send({ message: "Content can not be empty!" });
+  //   return;
+  // }
+   console.log(req.body);
   // Create a Tutorial
   const tutorial = new Tutorial({
-    title: req.body.title,
-    description: req.body.description,
-    published: req.body.published ? req.body.published : false
+    PSCode: req.body.PSCode,
+    Constituency: req.body.Constituency,
+    District: req.body.District,
+    PSName: req.body.PSName,
+    Region: req.body.Region,
+    Winner: req.body.Winner,
   });
 
   // Save Tutorial in the database
@@ -97,53 +150,6 @@ exports.create = (req, res) => {
     });
 };
 
-// Retrieve all Tutorials from the database.
-exports.findAll = (req, res) => {
-  console.log("API Request =========================================> FindAll");
-  const title = req.query.title;
-  var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
-
-  Tutorial.find(condition)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .send({
-          message:
-            err.message || "Some error occurred while retrieving tutorials."
-        });
-    });
-};
-
-// Find a single Tutorial with an id
-exports.findOne = (req, res) => {
-  console.log("API Request =========================================> FindOne");
-  const now = Date();
-  if (now - lastUpdated >= 24 * 60 * 60 * 1000){
-    grabNewsFromServer();
-  }
-
-  const limit = req.params.id;
-  let from = ( lastUpdated == req.lastUpdated
-              ? Math.max( limit - 9, 0 )
-              : 0 );
-  
-  Tutorial.find()
-    .skip(from)
-    .limit(limit - from)
-    .then(data => {
-      res.send( { data: data, first: from } );
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .send("Error");
-    })
-};
-
-// Update a Tutorial by the id in the request
 exports.update = (req, res) => {
   console.log("API Request =========================================> Update");
   if (!req.body) {
@@ -154,6 +160,7 @@ exports.update = (req, res) => {
 
   const id = req.params.id;
 
+  console.log(req.params.id);
   Tutorial.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
@@ -211,7 +218,7 @@ exports.deleteAll = (req, res) => {
 // Find all published Tutorials
 exports.findAllPublished = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
-  Tutorial.find({ published: true })
+  Tutorial.find({ })
     .then(data => {
       res.send(data);
     })

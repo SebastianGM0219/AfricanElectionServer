@@ -1,3 +1,5 @@
+const conn_str = "mongodb+srv://father:Showlightning123@cluster0.rpclhi3.mongodb.net/?retryWrites=true&w=majority";
+
 module.exports = {
-  url: "mongodb://localhost:27017/futurepedia_db"
+  url: conn_str
 };
