@@ -134,6 +134,7 @@ exports.create = (req, res) => {
     PSName: req.body.PSName,
     Region: req.body.Region,
     Winner: req.body.Winner,
+    TableData2: req.body.TableData2,
   });
 
   // Save Tutorial in the database
@@ -158,10 +159,11 @@ exports.update = (req, res) => {
     });
   }
 
-  const id = req.params.id;
+  // const id = req.params.id;
 
-  console.log(req.params.id);
-  Tutorial.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  console.log(req.body.PSCode);
+  console.log(req.body);
+  Tutorial.updateOne({PSCode:req.body.PSCode}, req.body, { useFindAndModify: true })
     .then(data => {
       if (!data) {
         res.status(404).send({
@@ -220,7 +222,18 @@ exports.findAllPublished = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
   Tutorial.find({ })
     .then(data => {
-      res.send(data);
+      const newData = data.map(item => {
+        return {
+          PSCode: item.PSCode,
+          PSName: item.PSName,
+          Region: item.Region,
+          District: item.District,
+          Constituency: item.Constituency,
+          Winner: item.Winner,          
+          TableData2: item.TableData2,
+        };
+      });
+      res.send(newData);
     })
     .catch(err => {
       res.status(500).send({

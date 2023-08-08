@@ -19,7 +19,7 @@ router.route('/read')
 router.route('/create')
    .post(tutorials.create)
 
-router.route('/update/:id')
+router.route('/update/')
  .post(tutorials.update)
 
  router.route('/delete/:id')
