@@ -161,9 +161,30 @@ exports.update = (req, res) => {
 
   // const id = req.params.id;
 
-  console.log(req.body.PSCode);
-  console.log(req.body);
-  Tutorial.updateOne({PSCode:req.body.PSCode}, req.body, { useFindAndModify: true })
+
+    // console.log(req.body);
+    const body = req.body;
+    const tableData= body.TableData;
+    let max=0, name="";
+     console.log(tableData);
+    tableData.map((rowData, rowIndex) => (
+      rowData.map((cellData, columnIndex) => {
+      
+        if(columnIndex === 3 && rowIndex<=8 && rowIndex>0&&max<tableData[rowIndex][3])
+        {
+          
+          max = tableData[rowIndex][3];
+          name = tableData[rowIndex][1];
+         
+        }
+      })
+    ));
+    console.log(name);
+    // console.log(name);
+    body.Winner = name;
+  
+
+  Tutorial.updateOne({PSCode:req.body.PSCode}, body, { useFindAndModify: true })
     .then(data => {
       if (!data) {
         res.status(404).send({
@@ -223,7 +244,14 @@ exports.findAllPublished = (req, res) => {
   Tutorial.find({ })
     .then(data => {
       const newData = data.map(item => {
-        return item;
+        return {
+          PSCode: item.PSCode,
+          PSName: item.PSName,
+          Region: item.Region,
+          District: item.District,
+          Constituency: item.Constituency,
+          Winner: item.Winner   
+        };
       });
       res.send(newData);
     })
