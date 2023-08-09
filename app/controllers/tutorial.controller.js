@@ -170,7 +170,7 @@ exports.update = (req, res) => {
           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
         });
       } else res.send({ message: "Tutorial was updated successfully." });
-    })
+    })  
     .catch(err => {
       res.status(500).send({
         message: "Error updating Tutorial with id=" + id
@@ -223,15 +223,7 @@ exports.findAllPublished = (req, res) => {
   Tutorial.find({ })
     .then(data => {
       const newData = data.map(item => {
-        return {
-          PSCode: item.PSCode,
-          PSName: item.PSName,
-          Region: item.Region,
-          District: item.District,
-          Constituency: item.Constituency,
-          Winner: item.Winner,          
-          TableData2: item.TableData2,
-        };
+        return item;
       });
       res.send(newData);
     })
