@@ -21,6 +21,9 @@ router.route('/create')
 
 router.route('/update/')
  .post(tutorials.update)
+ 
+ router.route('/detail/')
+ .post(tutorials.finddetail)
 
  router.route('/delete/:id')
  .post(tutorials.delete)

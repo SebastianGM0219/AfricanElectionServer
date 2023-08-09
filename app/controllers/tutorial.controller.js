@@ -242,3 +242,17 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+exports.finddetail = (req, res) => {
+  console.log("API Request =========================================> Finddetail");
+  console.log(req.body.PSCode);
+  Tutorial.findOne({PSCode:req.body.PSCode})
+    .then(item => {
+      res.send(item);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+};
