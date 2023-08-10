@@ -267,15 +267,16 @@ exports.findSearch = (req, res) => {
   console.log("API Request =========================================> FindSearch");
 
   const query = {};
-  if (req.body.Region) {
-    query.Region = req.body.Region;
-  }
   
-  if (req.body.District) {
-    query.District = req.body.District;
-  }
-  Tutorial.find({query })
-  .then(data => {
+  console.log(req.body.Region);
+  console.log(req.body.District);
+
+  // req.body.Region !== null
+  // ? Tutorial.find(req.body.District === null ? { Region: req.body.Region, District: req.body.District } : { Region: req.body.Region })
+  // : Tutorial.find({}).then(data => {
+  if(!req.body.Region)
+  {
+    Tutorial.find({}).then(data => {
       const newData = data.map(item => {
         return {
           PSCode: item.PSCode,
@@ -294,6 +295,51 @@ exports.findSearch = (req, res) => {
           err.message || "Some error occurred while retrieving tutorials."
       });
     });
+  }
+  else if (!req.body.District)
+  {
+    console.log("fool1");
+    Tutorial.find({Region: req.body.Region}).then(data => {
+      const newData = data.map(item => {
+        return {
+          PSCode: item.PSCode,
+          PSName: item.PSName,
+          Region: item.Region,
+          District: item.District,
+          Constituency: item.Constituency,
+          Winner: item.Winner   
+        };
+      });
+      res.send(newData);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+  }
+  else {
+    Tutorial.find({Region: req.body.Region, District: req.body.District}).then(data => {
+      const newData = data.map(item => {
+        return {
+          PSCode: item.PSCode,
+          PSName: item.PSName,
+          Region: item.Region,
+          District: item.District,
+          Constituency: item.Constituency,
+          Winner: item.Winner   
+        };
+      });
+      res.send(newData);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+  }
 };
 exports.finddetail = (req, res) => {
   console.log("API Request =========================================> Finddetail");
