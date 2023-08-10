@@ -15,13 +15,15 @@ const router = express.Router();
 
 router.route('/read')
    .post(tutorials.findAllPublished)
+router.route('/search')
+   .post(tutorials.findSearch)
 
 router.route('/create')
    .post(tutorials.create)
 
 router.route('/update/')
  .post(tutorials.update)
- 
+
  router.route('/detail/')
  .post(tutorials.finddetail)
 

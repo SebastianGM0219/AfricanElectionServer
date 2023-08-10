@@ -262,6 +262,39 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+
+exports.findSearch = (req, res) => {
+  console.log("API Request =========================================> FindSearch");
+
+  const query = {};
+  if (req.body.Region) {
+    query.Region = req.body.Region;
+  }
+  
+  if (req.body.District) {
+    query.District = req.body.District;
+  }
+  Tutorial.find({query })
+  .then(data => {
+      const newData = data.map(item => {
+        return {
+          PSCode: item.PSCode,
+          PSName: item.PSName,
+          Region: item.Region,
+          District: item.District,
+          Constituency: item.Constituency,
+          Winner: item.Winner   
+        };
+      });
+      res.send(newData);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+};
 exports.finddetail = (req, res) => {
   console.log("API Request =========================================> Finddetail");
   console.log(req.body.PSCode);
