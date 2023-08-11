@@ -39,6 +39,9 @@ router.route('/update/')
    .post(tutorials.search_country)
 router.route('/search_District')
    .post(tutorials.search_District)
+router.route('/search_Constituency')
+   .post(tutorials.search_Constituency)
+
    
 //  router.route('/:id')
 //   .post(tutorials.findOne)

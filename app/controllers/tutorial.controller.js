@@ -308,6 +308,24 @@ exports.search_District = (req, res) => {
     });
   });
 };
+
+exports.search_Constituency = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
+  Tutorial.distinct("Constituency", {Region:req.body.Region}).then(data => {
+    const newData = data.map(item => {
+      return {
+        title: item
+      };
+    });
+    res.send(newData);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving tutorials."
+    });
+  });
+};
 // exports.search_District = (req, res) => {
 //   console.log("API Request =========================================> FindAllPublished");
 //   Tutorial.distinct("District", {Region:req.body.Region}, function(err, data) {
@@ -435,9 +453,13 @@ exports.findSearch = (req, res) => {
   // }
   const query = !req.body.Region ? {} : { Region: req.body.Region };
 
-  if (req.body.District) {
+  if (req.body.Constituency) {
+    query.Constituency = req.body.Constituency;
+  }
+  else if(req.body.District) {
     query.District = req.body.District;
   }
+
   Tutorial.find(query)
     .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
     .skip((currentPage - 1) * pageSize) // Skip the appropriate number of items based on the page number
