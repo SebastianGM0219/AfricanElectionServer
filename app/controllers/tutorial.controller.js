@@ -357,7 +357,10 @@ exports.findSearch = (req, res) => {
   console.log("API Request =========================================> FindSearch");
 
 
-  
+  const pageSize = 10; // Number of items to retrieve in each page
+  const currentPage = req.body.Page || 1; // Get the requested page number from the query parameter
+
+  console.log(req.body.Page);
   console.log(req.body.Region);
   console.log(req.body.District);
 
@@ -435,25 +438,30 @@ exports.findSearch = (req, res) => {
   if (req.body.district) {
     query.District = req.body.district;
   }
-  Tutorial.find(query).then(data => {
-    const newData = data.map(item => {
-      return {
-        PSCode: item.PSCode,
-        PSName: item.PSName,
-        Region: item.Region,
-        District: item.District,
-        Constituency: item.Constituency,
-        Winner: item.Winner   
-      };
+  Tutorial.find(query)
+    .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
+    .skip((currentPage - 1) * pageSize) // Skip the appropriate number of items based on the page number
+    .limit(pageSize) // Retrieve only the desired number of items
+    .then(data => {
+      const newData = data.map(item => {
+        console.log(item);
+        return {
+          PSCode: item.PSCode,
+          PSName: item.PSName,
+          Region: item.Region,
+          District: item.District,
+          Constituency: item.Constituency,
+          Winner: item.Winner
+        };
+      });
+      res.send(newData);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving tutorials."
+      });
     });
-    res.send(newData);
-  })
-  .catch(err => {
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while retrieving tutorials."
-    });
-  });
+
 
 };
 exports.finddetail = (req, res) => {
