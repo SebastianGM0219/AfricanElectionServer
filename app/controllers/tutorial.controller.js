@@ -1,6 +1,10 @@
 const db = require("../models");
 const axios = require('axios');
 const Tutorial = db.tutorials;
+const fs = require('fs');
+const {parse} = require('csv-parse');
+var csv = require("fast-csv");
+var stream = fs.createReadStream('Elections App1.csv');
 
 let lastUpdated;
 let page = 0;
@@ -151,6 +155,18 @@ exports.create = (req, res) => {
     });
 };
 
+exports.createdata = (req, res) => {
+  console.log("API Request =========================================> Create");
+  // Validate request
+  // if (!req.body.title) {
+  //   res.status(400).send({ message: "Content can not be empty!" });
+  //   return;
+  // }
+
+
+};
+
+
 exports.update = (req, res) => {
   console.log("API Request =========================================> Update");
   if (!req.body) {
@@ -239,6 +255,51 @@ exports.deleteAll = (req, res) => {
 };
 
 // Find all published Tutorials
+exports.search_country = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
+  Tutorial.distinct("Country", function(err, data) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(data);
+  });
+};
+
+exports.search_Region = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
+  Tutorial.distinct("Region", {Country:req.body.Country}, function(err, data) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(data);
+  });
+};
+
+exports.search_District = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
+  Tutorial.distinct("District", {Region:req.body.Region}, function(err, data) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(data);
+  });
+};
+// exports.search_District = (req, res) => {
+//   console.log("API Request =========================================> FindAllPublished");
+//   Tutorial.distinct("District", {Region:req.body.Region}, function(err, data) {
+//     if (err) {
+//       console.error(err);
+//       return;
+//     }
+//     console.log(data);
+//   });
+// };
+
+
+
 exports.findAllPublished = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
   Tutorial.find({ })
@@ -266,7 +327,7 @@ exports.findAllPublished = (req, res) => {
 exports.findSearch = (req, res) => {
   console.log("API Request =========================================> FindSearch");
 
-  const query = {};
+
   
   console.log(req.body.Region);
   console.log(req.body.District);
@@ -274,72 +335,97 @@ exports.findSearch = (req, res) => {
   // req.body.Region !== null
   // ? Tutorial.find(req.body.District === null ? { Region: req.body.Region, District: req.body.District } : { Region: req.body.Region })
   // : Tutorial.find({}).then(data => {
-  if(!req.body.Region)
-  {
-    Tutorial.find({}).then(data => {
-      const newData = data.map(item => {
-        return {
-          PSCode: item.PSCode,
-          PSName: item.PSName,
-          Region: item.Region,
-          District: item.District,
-          Constituency: item.Constituency,
-          Winner: item.Winner   
-        };
-      });
-      res.send(newData);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
-      });
-    });
+  // if(!req.body.Region)
+  // {
+  //   Tutorial.find({}).then(data => {
+  //     const newData = data.map(item => {
+  //       return {
+  //         PSCode: item.PSCode,
+  //         PSName: item.PSName,
+  //         Region: item.Region,
+  //         District: item.District,
+  //         Constituency: item.Constituency,
+  //         Winner: item.Winner   
+  //       };
+  //     });
+  //     res.send(newData);
+  //   })
+  //   .catch(err => {
+  //     res.status(500).send({
+  //       message:
+  //         err.message || "Some error occurred while retrieving tutorials."
+  //     });
+  //   });
+  // }
+  // else if (!req.body.District)
+  // {
+  //   console.log("fool1");
+  //   Tutorial.find({Region: req.body.Region}).then(data => {
+  //     const newData = data.map(item => {
+  //       return {
+  //         PSCode: item.PSCode,
+  //         PSName: item.PSName,
+  //         Region: item.Region,
+  //         District: item.District,
+  //         Constituency: item.Constituency,
+  //         Winner: item.Winner   
+  //       };
+  //     });
+  //     res.send(newData);
+  //   })
+  //   .catch(err => {
+  //     res.status(500).send({
+  //       message:
+  //         err.message || "Some error occurred while retrieving tutorials."
+  //     });
+  //   });
+  // }
+  // else {
+  //   Tutorial.find({Region: req.body.Region, District: req.body.District}).then(data => {
+  //     con`st newData = data.map(item => {
+  //       return {
+  //         PSCode: item.PSCode,
+  //         PSName: item.PSName,
+  //         Region: item.Region,
+  //         District: item.District,
+  //         Constituency: item.Constituency,
+  //         Winner: item.Winner   
+  //       };
+  //     });
+  //     res.send(newData);
+  //   })
+  //   .catch(err => {
+  //     res.status(500).send({
+  //       message:
+  //         err.message || "Some error occurred while retrieving tutorials."
+  //     });
+  //   });
+  // }
+  const query = !req.body.Region ? {} : { Region: req.body.Region };
+
+  if (req.body.district) {
+    query.District = req.body.district;
   }
-  else if (!req.body.District)
-  {
-    console.log("fool1");
-    Tutorial.find({Region: req.body.Region}).then(data => {
-      const newData = data.map(item => {
-        return {
-          PSCode: item.PSCode,
-          PSName: item.PSName,
-          Region: item.Region,
-          District: item.District,
-          Constituency: item.Constituency,
-          Winner: item.Winner   
-        };
-      });
-      res.send(newData);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
-      });
+  Tutorial.find(query).then(data => {
+    const newData = data.map(item => {
+      return {
+        PSCode: item.PSCode,
+        PSName: item.PSName,
+        Region: item.Region,
+        District: item.District,
+        Constituency: item.Constituency,
+        Winner: item.Winner   
+      };
     });
-  }
-  else {
-    Tutorial.find({Region: req.body.Region, District: req.body.District}).then(data => {
-      const newData = data.map(item => {
-        return {
-          PSCode: item.PSCode,
-          PSName: item.PSName,
-          Region: item.Region,
-          District: item.District,
-          Constituency: item.Constituency,
-          Winner: item.Winner   
-        };
-      });
-      res.send(newData);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
-      });
+    res.send(newData);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving tutorials."
     });
-  }
+  });
+
 };
 exports.finddetail = (req, res) => {
   console.log("API Request =========================================> Finddetail");

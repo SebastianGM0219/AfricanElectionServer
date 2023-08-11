@@ -5,6 +5,7 @@ module.exports = mongoose => {
     {
       PSCode: { type: String, default: null },
       PSName: { type: String, default: null },
+      Country: { type: String, default: null },
       Region: { type: String, default: null },
       District: { type: String, default: null },
       Constituency: { type: String, default: null },

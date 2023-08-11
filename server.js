@@ -4,8 +4,17 @@ const app = express();
 const routes = require("./app/routes/turorial.routes");
 const conn_str = "mongodb+srv://father:Showlightning123@cluster0.rpclhi3.mongodb.net/?retryWrites=true&w=majority";
 const mongoose = require("mongoose");
-const db = require("./app/models");
 const bodyParser = require("body-parser");
+
+
+const fs = require('fs');
+const {parse} = require('csv-parse');
+var csv = require("fast-csv");
+var stream = fs.createReadStream('Elections App1.csv');
+
+const db = require("./app/models");
+const axios = require('axios');
+const Tutorial = db.tutorials;
 // const cookieParser = require("cookie-parser");
 // const compress = require("compression");
 // const methodOverride = require("method-override");
@@ -13,6 +22,12 @@ const bodyParser = require("body-parser");
 // const helmet = require("helmet");
 
 // parse body params and attache them to req.body
+
+//important code"
+
+
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -40,6 +55,40 @@ db.mongoose
   })
   .then(() => {
     console.log("Connected to the database!");
+
+    //   var list= new Array();
+    // fs.createReadStream('Elections App1.csv')
+    // .pipe(parse({delimiter: ':'}))
+    // .on('data', (row) => {
+    //   list.push(row)
+    //   // console.log(row);
+    // })
+    // .on('end', () => {
+    //   console.log('CSV file successfully processed');
+    //   //  console.log(list)
+    //   for (var i in list) {
+    //     var str= list[i].toString();
+
+    //     var res= str.split(",")
+    //     //const post= new Post();
+
+
+    //       const tutorial = new Tutorial({
+    //         PSCode: res[0].trimStart(),
+    //         PSName: res[1].trimStart(),
+    //         Country: res[2].trimStart(),
+    //         Region: res[3].trimStart(),
+    //         District: res[4].trimStart(),          
+    //         Constituency: res[5].trimStart(),
+    //       });
+                
+    //       // console.log(tutorial);
+    //       // Save Tutorial in the database
+    //       tutorial
+    //         .save(tutorial);
+    //     }
+    // });
+  
   })
   .catch(err => {
     console.log("Cannot connect to the database!", err);

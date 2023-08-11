@@ -20,7 +20,12 @@ router.route('/search')
 
 router.route('/create')
    .post(tutorials.create)
+router.route('/createdata')
+   .post(tutorials.createdata)
+router.route('/search_Region')
+   .post(tutorials.search_Region)
 
+   
 router.route('/update/')
  .post(tutorials.update)
 
@@ -29,6 +34,12 @@ router.route('/update/')
 
  router.route('/delete/:id')
  .post(tutorials.delete)
+
+ router.route('/search_country')
+   .post(tutorials.search_country)
+router.route('/search_District')
+   .post(tutorials.search_District)
+   
 //  router.route('/:id')
 //   .post(tutorials.findOne)
 
