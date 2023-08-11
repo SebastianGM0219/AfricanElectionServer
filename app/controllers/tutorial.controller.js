@@ -435,8 +435,8 @@ exports.findSearch = (req, res) => {
   // }
   const query = !req.body.Region ? {} : { Region: req.body.Region };
 
-  if (req.body.district) {
-    query.District = req.body.district;
+  if (req.body.District) {
+    query.District = req.body.District;
   }
   Tutorial.find(query)
     .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
