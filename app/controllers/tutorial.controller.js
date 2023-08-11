@@ -323,24 +323,32 @@ exports.search_District = (req, res) => {
 
 exports.findAllPublished = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
-  Tutorial.find({ })
+
+  const pageSize = 10; // Number of items to retrieve in each page
+  const currentPage = req.body.Page || 1; // Get the requested page number from the query parameter
+
+  console.log(req.body.Page);
+  Tutorial.find({})
+    .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
+    .skip((currentPage - 1) * pageSize) // Skip the appropriate number of items based on the page number
+    .limit(pageSize) // Retrieve only the desired number of items
     .then(data => {
       const newData = data.map(item => {
+        console.log(item);
         return {
           PSCode: item.PSCode,
           PSName: item.PSName,
           Region: item.Region,
           District: item.District,
           Constituency: item.Constituency,
-          Winner: item.Winner   
+          Winner: item.Winner
         };
       });
       res.send(newData);
     })
     .catch(err => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
+        message: err.message || "Some error occurred while retrieving tutorials."
       });
     });
 };
