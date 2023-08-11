@@ -257,34 +257,55 @@ exports.deleteAll = (req, res) => {
 // Find all published Tutorials
 exports.search_country = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
-  Tutorial.distinct("Country", function(err, data) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log(data);
+  Tutorial.distinct("Country").then(data => {
+    const newData = data.map(item => {
+      return {
+        title: item
+      };
+    });
+    res.send(newData);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving tutorials."
+    });
   });
 };
 
 exports.search_Region = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
-  Tutorial.distinct("Region", {Country:req.body.Country}, function(err, data) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log(data);
+  Tutorial.distinct("Region", {Country:req.body.Country}).then(data => {
+    const newData = data.map(item => {
+      return {
+        title: item
+      };
+    });
+    res.send(newData);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving tutorials."
+    });
   });
 };
 
 exports.search_District = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
-  Tutorial.distinct("District", {Region:req.body.Region}, function(err, data) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log(data);
+  Tutorial.distinct("District", {Region:req.body.Region}).then(data => {
+    const newData = data.map(item => {
+      return {
+        title: item
+      };
+    });
+    res.send(newData);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving tutorials."
+    });
   });
 };
 // exports.search_District = (req, res) => {
