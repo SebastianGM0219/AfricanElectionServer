@@ -6,8 +6,11 @@ const conn_str = "mongodb+srv://father:Showlightning123@cluster0.rpclhi3.mongodb
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
-
+const https = require('https');
 const fs = require('fs');
+let key = fs.readFileSync(__dirname+'/tutorial.key','utf-8');
+let cert = fs.readFileSync(__dirname+'/tutorial.crt','utf-8');
+
 const {parse} = require('csv-parse');
 var csv = require("fast-csv");
 var stream = fs.createReadStream('Elections App1.csv');
@@ -83,7 +86,7 @@ db.mongoose
     //       });
                 
     //       // console.log(tutorial);
-    //       // Save Tutorial in the database
+    //       // Savze Tutorial in the database
     //       tutorial
     //         .save(tutorial);
     //     }
@@ -119,6 +122,14 @@ app.use("/", routes);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 443;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
+const parameters = {
+  key: key,
+  cert: cert
+}
+let server = https.createServer(parameters,app)
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}.`);
+// });
+server.listen(PORT,()=>{
+  console.log(`Server is listening at port ${PORT}`)
+})

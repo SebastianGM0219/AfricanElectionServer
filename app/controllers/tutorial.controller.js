@@ -310,7 +310,7 @@ exports.search_District = (req, res) => {
 };
 
 exports.search_Constituency = (req, res) => {
-  console.log("API Request =========================================> FindAllPublished");
+  console.log("API Request ======== =================================> FindAllPublished");
   Tutorial.distinct("Constituency", {Region:req.body.Region}).then(data => {
     const newData = data.map(item => {
       return {
