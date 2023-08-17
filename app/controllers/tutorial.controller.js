@@ -313,7 +313,7 @@ exports.update = (req, res) => {
           const candidates = [];
           const names = [];
         //      console.log(req.body.TableData);
-          const table = JSON.parse(req.body.TableData);
+          const {table} = req.body.TableData;
           let sum_me = parseInt(summary.Sum);
           for (let i = 1; i <= 8; i++) {
             let valful= 0;
@@ -407,7 +407,9 @@ exports.update = (req, res) => {
           const candidates = [];
           const names = [];
         //      console.log(req.body.TableData);
-          const table = JSON.parse(req.body.TableData);
+          // const table = JSON.parse(req.body.TableData);
+          const {table} = req.body.TableData;
+
           let sum_me = parseInt(summary_region.Sum);
           for (let i = 1; i <= 8; i++) {
             let valful= 0;
@@ -501,7 +503,9 @@ exports.update = (req, res) => {
           const candidates = [];
           const names = [];
         //      console.log(req.body.TableData);
-          const table = JSON.parse(req.body.TableData);
+          // const table = JSON.parse(req.body.TableData);
+          const {table} = req.body.TableData;
+
           let sum_me = parseInt(summary_nation.Sum);
           for (let i = 1; i <= 8; i++) {
             let valful= 0;
