@@ -1,6 +1,7 @@
 const db = require("../models");
 const axios = require('axios');
 const Tutorial = db.tutorials;
+const summary = db.summary;
 const fs = require('fs');
 const {parse} = require('csv-parse');
 var csv = require("fast-csv");
@@ -175,44 +176,119 @@ exports.update = (req, res) => {
     });
   }
 
-  // const id = req.params.id;
+  const id = req.params.id;
 
 
-    // console.log(req.body);
-    const body = req.body;
-    const tableData= body.TableData;
-    let max=0, name="";
-     console.log(tableData);
-    tableData.map((rowData, rowIndex) => (
-      rowData.map((cellData, columnIndex) => {
+  //   console.log(req.body);
+  //   const body = req.body;
+  //   const tableData= body.TableData;
+  //   let max=0, name="";
+  //    console.log(tableData);
+  //   tableData.map((rowData, rowIndex) => (
+  //     rowData.map((cellData, columnIndex) => {
       
-        if(columnIndex === 3 && rowIndex<=8 && rowIndex>0&&max<tableData[rowIndex][3])
-        {
+  //       if(columnIndex === 3 && rowIndex<=8 && rowIndex>0&&max<tableData[rowIndex][3])
+  //       {
           
-          max = tableData[rowIndex][3];
-          name = tableData[rowIndex][1];
+  //         max = tableData[rowIndex][3];
+  //         name = tableData[rowIndex][1];
          
-        }
-      })
-    ));
-    console.log(name);
-    // console.log(name);
-    body.Winner = name;
+  //       }
+  //     })
+  //   ));
+  //   console.log(name);
+  //   // console.log(name);
+  //   body.Winner = name;
   
 
-  Tutorial.updateOne({PSCode:req.body.PSCode}, body, { useFindAndModify: true })
-    .then(data => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
-        });
-      } else res.send({ message: "Tutorial was updated successfully." });
-    })  
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating Tutorial with id=" + id
-      });
+  // Tutorial.updateOne({PSCode:req.body.PSCode}, body, { useFindAndModify: true })
+  //   .then(data => {
+  //     if (!data) {
+  //       res.status(404).send({
+  //         message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
+  //       });
+  //     } else res.send({ message: "Tutorial was updated successfully." });
+  //   })  
+  //   .catch(err => {
+  //     // res.status(500).send({
+  //     //   message: "Error updating Tutorial with id=" + id
+  //     // });
+  //   });
+
+    summary.findOneAndUpdate({PSCode:req.body.PSCode},{ $setOnInsert: { PSCode: req.body.PSCode ,
+      Country:req.body.Country,
+      Region: req.body.Region,
+      District: req.body.District,
+      Constituency: req.body.Constituency,
+    } }, { upsert: true, new: true }, (error, summary) => {
+      if (error) {
+        console.error('Error finding document:', error);
+        return;
+      }
+      res.send({ message: "Fine was updated successfully." });
+      const candidates = [];
+      const names = [];
+//      console.log(req.body.TableData);
+      const table = JSON.parse(req.body.TableData);
+      for (let i = 1; i <= 8; i++) {
+        const candidate = table[i][1];
+        const val = table[i][3];
+//        console.log(candidate);
+
+        if (candidate !== null && candidate !== "") {
+          if (!isNaN(val)) {
+            candidates.push(candidate);
+            names.push(val);  
+          }
+          else
+          {
+            candidates.push(candidate);
+            names.push(0);  
+          }
+
+          const voteCountIndex = summary.VoteCount.findIndex((obj) => obj.name === candidate);
+          if (voteCountIndex !== -1) {
+            
+            console.log(voteCountIndex);
+            console.log(names);
+            summary.VoteCount[voteCountIndex].value = names[voteCountIndex-1];
+//            console.log(candidate);
+
+          }
+          else
+          {
+            summary.VoteCount.push({name: candidate, value: names[voteCountIndex]});
+           // console.log(candidate);
+          }          
+        }
+        // console.log(summary);
+
+      }
+
+      // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
+    
+      // if (index !== -1) {
+      //   // If the value is found in the PartyData array
+      //   // Update the VoteCount value for the corresponding index
+      //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
+      // } else {
+      //   // If the value is not found in the PartyData array, push new data
+      //   summary.PartyData.push(PartyDataFind);
+      //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
+      // }
+        summary.save()
+          .then(savedSummary => {
+            console.log('Document updated:', savedSummary);
+
+            
+          })
+          .catch(saveError => {
+            console.error('Error saving updated document:', saveError);
+          });
+  
     });
+
+   
 };
 
 // Delete a Tutorial with the specified id in the request
