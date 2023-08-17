@@ -205,19 +205,15 @@ exports.update = (req, res) => {
   //   body.Winner = name;
   
 
-  // Tutorial.updateOne({PSCode:req.body.PSCode}, body, { useFindAndModify: true })
-  //   .then(data => {
-  //     if (!data) {
-  //       res.status(404).send({
-  //         message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
-  //       });
-  //     } else res.send({ message: "Tutorial was updated successfully." });
-  //   })  
-  //   .catch(err => {
-  //     // res.status(500).send({
-  //     //   message: "Error updating Tutorial with id=" + id
-  //     // });
-  //   });
+  Tutorial.updateOne({PSCode:req.body.PSCode}, req.body, { useFindAndModify: true })
+    .then(data => {
+
+    })  
+    .catch(err => {
+      // res.status(500).send({
+      //   message: "Error updating Tutorial with id=" + id
+      // });
+    });
 
 //     summary.findOneAndUpdate({PSCode:req.body.PSCode},{ $setOnInsert: { PSCode: req.body.PSCode ,
 //       Country:req.body.Country,
@@ -317,7 +313,7 @@ exports.update = (req, res) => {
           const candidates = [];
           const names = [];
         //      console.log(req.body.TableData);
-          const table = JSON.parse(data.TableData);
+          const table = JSON.parse(req.body.TableData);
           let sum_me = parseInt(summary.Sum);
           for (let i = 1; i <= 8; i++) {
             let valful= 0;
