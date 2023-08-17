@@ -508,8 +508,9 @@ exports.update = (req, res) => {
           const names = [];
         //      console.log(req.body.TableData);
           // const table = JSON.parse(req.body.TableData);
-          const {table} = req.body.TableData;
+          const {TableData} = req.body;
 
+          const table=TableData;
           let sum_me = parseInt(summary_nation.Sum);
           for (let i = 1; i <= 8; i++) {
             let valful= 0;
