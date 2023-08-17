@@ -215,80 +215,174 @@ exports.update = (req, res) => {
   //     // });
   //   });
 
-    summary.findOneAndUpdate({PSCode:req.body.PSCode},{ $setOnInsert: { PSCode: req.body.PSCode ,
-      Country:req.body.Country,
-      Region: req.body.Region,
-      District: req.body.District,
-      Constituency: req.body.Constituency,
-    } }, { upsert: true, new: true }, (error, summary) => {
-      if (error) {
-        console.error('Error finding document:', error);
-        return;
-      }
-      res.send({ message: "Fine was updated successfully." });
-      const candidates = [];
-      const names = [];
+//     summary.findOneAndUpdate({PSCode:req.body.PSCode},{ $setOnInsert: { PSCode: req.body.PSCode ,
+//       Country:req.body.Country,
+//       Region: req.body.Region,
+//       District: req.body.District,
+//       Constituency: req.body.Constituency,
+//     } }, { upsert: true, new: true }, (error, summary) => {
+//       if (error) {
+//         console.error('Error finding document:', error);
+//         return;
+//       }
+//       res.send({ message: "Fine was updated successfully." });
+//       const candidates = [];
+//       const names = [];
+// //      console.log(req.body.TableData);
+//       const table = JSON.parse(req.body.TableData);
+//       for (let i = 1; i <= 8; i++) {
+//         const candidate = table[i][1];
+//         const val = table[i][3];
+// //        console.log(candidate);
+
+//         if (candidate !== null && candidate !== "") {
+//           if (!isNaN(val)) {
+//             candidates.push(candidate);
+//             names.push(val);  
+//           }
+//           else
+//           {
+//             candidates.push(candidate);
+//             names.push(0);  
+//           }
+
+//           const voteCountIndex = summary.VoteCount.findIndex((obj) => obj.name === candidate);
+//           if (voteCountIndex !== -1) {
+            
+//             console.log(voteCountIndex);
+//             console.log(names);
+//             summary.VoteCount[voteCountIndex].value = names[voteCountIndex-1];
+// //            console.log(candidate);
+
+//           }
+//           else
+//           {
+//             summary.VoteCount.push({name: candidate, value: names[voteCountIndex]});
+//            // console.log(candidate);
+//           }          
+//         }
+//         // console.log(summary);
+
+//       }
+
+//       // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
+    
+//       // if (index !== -1) {
+//       //   // If the value is found in the PartyData array
+//       //   // Update the VoteCount value for the corresponding index
+//       //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
+//       // } else {
+//       //   // If the value is not found in the PartyData array, push new data
+//       //   summary.PartyData.push(PartyDataFind);
+//       //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
+//       // }
+//         summary.save()
+//           .then(savedSummary => {
+//             console.log('Document updated:', savedSummary);
+
+            
+//           })
+//           .catch(saveError => {
+//             console.error('Error saving updated document:', saveError);
+//           });
+  
+//     });
+
+summary.findOneAndUpdate({Constituency: req.body.Constituency},{ $setOnInsert: { 
+  Country:req.body.Country,
+  Region: req.body.Region,
+  District: req.body.District,
+  Constituency: req.body.Constituency,
+} }, { upsert: true, new: true }, (error, summary) => {
+  if (error) {
+    console.error('Error finding document:', error);
+    return;
+  }
+  res.send({ message: "Fine was updated successfully." });
+  const candidates = [];
+  const names = [];
 //      console.log(req.body.TableData);
-      const table = JSON.parse(req.body.TableData);
-      for (let i = 1; i <= 8; i++) {
-        const candidate = table[i][1];
-        const val = table[i][3];
+  const table = JSON.parse(req.body.TableData);
+  let sum_me = parseInt(summary.Sum);
+  for (let i = 1; i <= 8; i++) {
+    let valful= 0;
+     if (!isNaN(parseInt(table[i][3])) ) 
+     {
+      let valful = parseInt(table[i][3]);
+      console.log(valful);
+      summary.Sum  = summary.Sum + parseInt(valful);
+ 
+     }
+     else
+     {
+       valful= 0;  
+     }             
+  }
+
+  for (let i = 1; i <= 8; i++) {
+    const candidate = table[i][1];
+    const party_val = table[i][2];
+    let val = '0';
+    if (!isNaN(table[i][3])) {
+       val = table[i][3];
+    }
+    else
+      val= '0';
+
+ 
 //        console.log(candidate);
 
-        if (candidate !== null && candidate !== "") {
-          if (!isNaN(val)) {
-            candidates.push(candidate);
-            names.push(val);  
-          }
-          else
-          {
-            candidates.push(candidate);
-            names.push(0);  
-          }
+    if (candidate !== null && candidate !== "") {
+        candidates.push(candidate);
+        names.push(val);  
 
-          const voteCountIndex = summary.VoteCount.findIndex((obj) => obj.name === candidate);
-          if (voteCountIndex !== -1) {
-            
-            console.log(voteCountIndex);
-            console.log(names);
-            summary.VoteCount[voteCountIndex].value = names[voteCountIndex-1];
-//            console.log(candidate);
-
-          }
-          else
-          {
-            summary.VoteCount.push({name: candidate, value: names[voteCountIndex]});
-           // console.log(candidate);
-          }          
-        }
-        // console.log(summary);
-
+      const voteCountIndex = summary.VoteCount.findIndex((obj) => obj.name === candidate);
+      if (voteCountIndex !== -1) {
+        
+        console.log(voteCountIndex);
+        console.log(names);
+        summary.VoteCount[voteCountIndex].value = parseInt(summary.VoteCount[voteCountIndex].value) + parseInt(val);
       }
+      else
+      {
+     
+        console.log(val);
+        console.log(summary.Sum);   
+        summary.CandiDate.push(candidate);
+        summary.VoteCount.push({name: candidate, value: parseInt(val)});
+        summary.PartyData.push({name: candidate, value: party_val});
+        summary.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary.Sum)) * 100});
 
-      // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
-    
-      // if (index !== -1) {
-      //   // If the value is found in the PartyData array
-      //   // Update the VoteCount value for the corresponding index
-      //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
-      // } else {
-      //   // If the value is not found in the PartyData array, push new data
-      //   summary.PartyData.push(PartyDataFind);
-      //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
-      // }
-        summary.save()
-          .then(savedSummary => {
-            console.log('Document updated:', savedSummary);
+       // console.log(candidate);
+      }          
+    }
+    // console.log(summary);
 
-            
-          })
-          .catch(saveError => {
-            console.error('Error saving updated document:', saveError);
-          });
-  
-    });
+  }
 
-   
+  // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
+
+  // if (index !== -1) {
+  //   // If the value is found in the PartyData array
+  //   // Update the VoteCount value for the corresponding index
+  //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
+  // } else {
+  //   // If the value is not found in the PartyData array, push new data
+  //   summary.PartyData.push(PartyDataFind);
+  //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
+  // }
+    summary.save()
+      .then(savedSummary => {
+        console.log('Document updated:', savedSummary);
+
+        
+      })
+      .catch(saveError => {
+        console.error('Error saving updated document:', saveError);
+      });
+
+});
+
 };
 
 // Delete a Tutorial with the specified id in the request
@@ -456,7 +550,120 @@ exports.findSearch = (req, res) => {
 
   console.log(req.body.Page);
   console.log(req.body.Region);
-  console.log(req.body.District);
+  console.log(req.body.Constituency);
+
+  // // req.body.Region !== null
+  // // ? Tutorial.find(req.body.District === null ? { Region: req.body.Region, District: req.body.District } : { Region: req.body.Region })
+  // // : Tutorial.find({}).then(data => {
+  // // if(!req.body.Region)
+  // // {
+  // //   Tutorial.find({}).then(data => {
+  // //     const newData = data.map(item => {
+  // //       return {
+  // //         PSCode: item.PSCode,
+  // //         PSName: item.PSName,
+  // //         Region: item.Region,
+  // //         District: item.District,
+  // //         Constituency: item.Constituency,
+  // //         Winner: item.Winner   
+  // //       };
+  // //     });
+  // //     res.send(newData);
+  // //   })
+  // //   .catch(err => {
+  // //     res.status(500).send({
+  // //       message:
+  // //         err.message || "Some error occurred while retrieving tutorials."
+  // //     });
+  // //   });
+  // // }
+  // // else if (!req.body.District)
+  // // {
+  // //   console.log("fool1");
+  // //   Tutorial.find({Region: req.body.Region}).then(data => {
+  // //     const newData = data.map(item => {
+  // //       return {
+  // //         PSCode: item.PSCode,
+  // //         PSName: item.PSName,
+  // //         Region: item.Region,
+  // //         District: item.District,
+  // //         Constituency: item.Constituency,
+  // //         Winner: item.Winner   
+  // //       };
+  // //     });
+  // //     res.send(newData);
+  // //   })
+  // //   .catch(err => {
+  // //     res.status(500).send({
+  // //       message:
+  // //         err.message || "Some error occurred while retrieving tutorials."
+  // //     });
+  // //   });
+  // // }
+  // // else {
+  // //   Tutorial.find({Region: req.body.Region, District: req.body.District}).then(data => {
+  // //     con`st newData = data.map(item => {
+  // //       return {
+  // //         PSCode: item.PSCode,
+  // //         PSName: item.PSName,
+  // //         Region: item.Region,
+  // //         District: item.District,
+  // //         Constituency: item.Constituency,
+  // //         Winner: item.Winner   
+  // //       };
+  // //     });
+  // //     res.send(newData);
+  // //   })
+  // //   .catch(err => {
+  // //     res.status(500).send({
+  // //       message:
+  // //         err.message || "Some error occurred while retrieving tutorials."
+  // //     });
+  // //   });
+  // // }
+
+  
+  // const query = !req.body.Region ? {} : { Region: req.body.Region };
+
+  // if (req.body.Constituency) {
+  //   query.Constituency = req.body.Constituency;
+  // }
+  // else if(req.body.District) {
+  //   query.District = req.body.District;
+  // }
+
+  // Tutorial.find(query)
+  //   .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
+  //   .skip((currentPage - 1) * pageSize) // Skip the appropriate number of items based on the page number
+  //   .limit(pageSize) // Retrieve only the desired number of items
+  //   .then(data => {
+  //     const newData = data.map(item => {
+  //       console.log(item);
+  //       return {
+  //         PSCode: item.PSCode,
+  //         PSName: item.PSName,
+  //         Region: item.Region,
+  //         District: item.District,
+  //         Constituency: item.Constituency,
+  //         Winner: item.Winner
+  //       };
+  //     });
+  //     res.send(newData);
+  //   })
+  //   .catch(err => {
+  //     res.status(500).send({
+  //       message: err.message || "Some error occurred while retrieving tutorials."
+  //     });
+  //   });
+
+
+  
+  const pageSize = 10; // Number of items to retrieve in each page
+  const currentPage = req.body.Page || 1; // Get the requested page number from the query parameter
+
+  console.log(req.body.Page);
+  console.log(req.body.Region);
+  console.log(req.body.Constituency);
 
   // req.body.Region !== null
   // ? Tutorial.find(req.body.District === null ? { Region: req.body.Region, District: req.body.District } : { Region: req.body.Region })
@@ -527,38 +734,25 @@ exports.findSearch = (req, res) => {
   //     });
   //   });
   // }
-  const query = !req.body.Region ? {} : { Region: req.body.Region };
 
-  if (req.body.Constituency) {
-    query.Constituency = req.body.Constituency;
-  }
-  else if(req.body.District) {
-    query.District = req.body.District;
-  }
+  
 
-  Tutorial.find(query)
-    .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
-    .skip((currentPage - 1) * pageSize) // Skip the appropriate number of items based on the page number
-    .limit(pageSize) // Retrieve only the desired number of items
-    .then(data => {
-      const newData = data.map(item => {
-        console.log(item);
-        return {
-          PSCode: item.PSCode,
-          PSName: item.PSName,
-          Region: item.Region,
-          District: item.District,
-          Constituency: item.Constituency,
-          Winner: item.Winner
-        };
-      });
-      res.send(newData);
+  if (req.body.Constituency) 
+  {
+    summary.findOne({PSCode:req.body.Constituency})
+    .then(item => {
+      res.send(item);
     })
     .catch(err => {
       res.status(500).send({
-        message: err.message || "Some error occurred while retrieving tutorials."
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
       });
     });
+  }
+
+
+ 
 
 
 };

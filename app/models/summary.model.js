@@ -12,7 +12,7 @@ module.exports = mongoose => {
       PartyData: { type: [{name:String, value: String}], default: null },
       VoteCount: { type: [{name:String, value: Number}], default: null },
       Percent: { type: [{name:String, value: Number}], default: null },
-      
+      Sum: {type: Number, default: 0},
     },
     { timestamps: true }
   );
