@@ -658,8 +658,8 @@ exports.findSearch = (req, res) => {
 
 
   
-  const pageSize = 10; // Number of items to retrieve in each page
-  const currentPage = req.body.Page || 1; // Get the requested page number from the query parameter
+  // const pageSize = 10; // Number of items to retrieve in each page
+  // const currentPage = req.body.Page || 1; // Get the requested page number from the query parameter
 
   console.log(req.body.Page);
   console.log(req.body.Region);
@@ -739,8 +739,9 @@ exports.findSearch = (req, res) => {
 
   if (req.body.Constituency) 
   {
-    summary.findOne({PSCode:req.body.Constituency})
+    summary.findOne({Constituency:req.body.Constituency})
     .then(item => {
+      console.log(item);
       res.send(item);
     })
     .catch(err => {
