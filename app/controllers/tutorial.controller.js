@@ -2,9 +2,13 @@ const db = require("../models");
 const axios = require('axios');
 const Tutorial = db.tutorials;
 const summary = db.summary;
+const summary_region = db.summary_region;
+const summary_nation = db.summary_nation;
+
 const fs = require('fs');
 const {parse} = require('csv-parse');
 var csv = require("fast-csv");
+const summary_regionModel = require("../models/summary_region.model");
 var stream = fs.createReadStream('Elections App1.csv');
 
 let lastUpdated;
@@ -394,6 +398,193 @@ exports.update = (req, res) => {
         
         });
 
+        summary_region.findOneAndUpdate({Region: data.Region},{ $setOnInsert: { 
+          Country:data.Country,
+          Region: data.Region,
+          District: data.District,
+          Constituency: data.Constituency,
+        } }, { upsert: true, new: true }, (error, summary_region) => {
+          if (error) {
+            console.error('Error finding document:', error);
+            return;
+          }
+          const candidates = [];
+          const names = [];
+        //      console.log(req.body.TableData);
+          const table = JSON.parse(data.TableData);
+          let sum_me = parseInt(summary_region.Sum);
+          for (let i = 1; i <= 8; i++) {
+            let valful= 0;
+             if (!isNaN(parseInt(table[i][3])) ) 
+             {
+              let valful = parseInt(table[i][3]);
+              console.log(valful);
+              summary_region.Sum  = summary_region.Sum + parseInt(valful);
+         
+             }
+             else
+             {
+               valful= 0;  
+             }             
+          }
+        
+          for (let i = 1; i <= 8; i++) {
+            const candidate = table[i][1];
+            const party_val = table[i][2];
+            let val = '0';
+            if (!isNaN(table[i][3])) {
+               val = table[i][3];
+            }
+            else
+              val= '0';
+        
+         
+        //        console.log(candidate);
+        
+            if (candidate !== null && candidate !== "") {
+                candidates.push(candidate);
+                names.push(val);  
+        
+              const voteCountIndex = summary_region.VoteCount.findIndex((obj) => obj.name === candidate);
+              if (voteCountIndex !== -1) {
+                
+                console.log(voteCountIndex);
+                console.log(names);
+                summary_region.VoteCount[voteCountIndex].value = parseInt(summary_region.VoteCount[voteCountIndex].value) + parseInt(val);
+              }
+              else
+              {
+             
+                console.log(val);
+                console.log(summary_region.Sum);   
+                summary_region.CandiDate.push(candidate);
+                summary_region.VoteCount.push({name: candidate, value: parseInt(val)});
+                summary_region.PartyData.push({name: candidate, value: party_val});
+                summary_region.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary_region.Sum)) * 100});
+        
+               // console.log(candidate);
+              }          
+            }
+            // console.log(summary);
+        
+          }
+        
+          // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
+        
+          // if (index !== -1) {
+          //   // If the value is found in the PartyData array
+          //   // Update the VoteCount value for the corresponding index
+          //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
+          // } else {
+          //   // If the value is not found in the PartyData array, push new data
+          //   summary.PartyData.push(PartyDataFind);
+          //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
+          // }
+          summary_region.save()
+              .then(savedSummary => {
+                console.log('Document updated:', savedSummary);
+        
+                
+              })
+              .catch(saveError => {
+                console.error('Error saving updated document:', saveError);
+              });
+        
+        });
+
+        summary_nation.findOneAndUpdate({Country: data.Country},{ $setOnInsert: { 
+          Country:data.Country,
+          Region: data.Region,
+          District: data.District,
+          Constituency: data.Constituency,
+        } }, { upsert: true, new: true }, (error, summary_nation) => {
+          if (error) {
+            console.error('Error finding document:', error);
+            return;
+          }
+          const candidates = [];
+          const names = [];
+        //      console.log(req.body.TableData);
+          const table = JSON.parse(data.TableData);
+          let sum_me = parseInt(summary_nation.Sum);
+          for (let i = 1; i <= 8; i++) {
+            let valful= 0;
+             if (!isNaN(parseInt(table[i][3])) ) 
+             {
+              let valful = parseInt(table[i][3]);
+              console.log(valful);
+              summary_nation.Sum  = summary_nation.Sum + parseInt(valful);
+         
+             }
+             else
+             {
+               valful= 0;  
+             }             
+          }
+        
+          for (let i = 1; i <= 8; i++) {
+            const candidate = table[i][1];
+            const party_val = table[i][2];
+            let val = '0';
+            if (!isNaN(table[i][3])) {
+               val = table[i][3];
+            }
+            else
+              val= '0';
+        
+         
+        //        console.log(candidate);
+        
+            if (candidate !== null && candidate !== "") {
+                candidates.push(candidate);
+                names.push(val);  
+        
+              const voteCountIndex = summary_nation.VoteCount.findIndex((obj) => obj.name === candidate);
+              if (voteCountIndex !== -1) {
+                
+                console.log(voteCountIndex);
+                console.log(names);
+                summary_nation.VoteCount[voteCountIndex].value = parseInt(summary_nation.VoteCount[voteCountIndex].value) + parseInt(val);
+              }
+              else
+              {
+             
+                console.log(val);
+                console.log(summary_nation.Sum);   
+                summary_nation.CandiDate.push(candidate);
+                summary_nation.VoteCount.push({name: candidate, value: parseInt(val)});
+                summary_nation.PartyData.push({name: candidate, value: party_val});
+                summary_nation.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary_nation.Sum)) * 100});
+        
+               // console.log(candidate);
+              }          
+            }
+            // console.log(summary);
+        
+          }
+        
+          // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
+        
+          // if (index !== -1) {
+          //   // If the value is found in the PartyData array
+          //   // Update the VoteCount value for the corresponding index
+          //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
+          // } else {
+          //   // If the value is not found in the PartyData array, push new data
+          //   summary.PartyData.push(PartyDataFind);
+          //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
+          // }
+          summary_nation.save()
+              .then(savedSummary => {
+                console.log('Document updated:', savedSummary);
+        
+              })
+              .catch(saveError => {
+                console.error('Error saving updated document:', saveError);
+              });
+        
+        });
+
       }
 
     })  
@@ -757,22 +948,65 @@ exports.findSearch = (req, res) => {
   //   });
   // }
 
-  
+  let val = [];
 
-  if (req.body.Constituency) 
-  {
-    summary.findOne({Constituency:req.body.Constituency})
-    .then(item => {
-      console.log(item);
-      res.send(item);
+  // Create an array to store the promises
+  let promises = [];
+  
+  if (req.body.Constituency) {
+    // Push the promise to retrieve the summary into the promises array
+    promises.push(
+      summary.findOne({ Constituency: req.body.Constituency })
+        .then(item => {
+          val[0] = item;
+          console.log(item);
+        })
+        .catch(err => {
+          throw new Error(err.message || "Some error occurred while retrieving tutorials.");
+        })
+    );
+  }
+  
+  if (req.body.Region) {
+    // Push the promise to retrieve the summary_region into the promises array
+    promises.push(
+      summary_region.findOne({ Region: req.body.Region })
+        .then(item => {
+          val[1] = item;
+          console.log(item);
+        })
+        .catch(err => {
+          throw new Error(err.message || "Some error occurred while retrieving tutorials.");
+        })
+    );
+  }
+  
+  if (req.body.Country) {
+    // Push the promise to retrieve the summary_nation into the promises array
+    promises.push(
+      summary_nation.findOne({ Country: req.body.Country })
+        .then(item => {
+          val[2] = item;
+          console.log(item);
+        })
+        .catch(err => {
+          throw new Error(err.message || "Some error occurred while retrieving tutorials.");
+        })
+    );
+  }
+  
+  // Await all promises to resolve using Promise.all
+  Promise.all(promises)
+    .then(() => {
+      // Send the response with the populated val array
+      res.send(val);
     })
     .catch(err => {
+      // Handle any errors that occurred during the promises
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
+        message: err.message || "Some error occurred while retrieving tutorials."
       });
     });
-  }
 
 
  

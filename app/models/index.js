@@ -8,5 +8,8 @@ db.mongoose = mongoose;
 db.url = dbConfig.url;
 db.tutorials = require("./tutorial.model.js")(mongoose);
 db.summary = require("./summary.model.js")(mongoose);
+db.summary_region = require("./summary_region.model.js")(mongoose);
+db.summary_nation = require("./summary_nation.model.js")(mongoose);
+
 
 module.exports = db;
