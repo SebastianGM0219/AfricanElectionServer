@@ -24,6 +24,8 @@ router.route('/createdata')
    .post(tutorials.createdata)
 router.route('/search_Region')
    .post(tutorials.search_Region)
+router.route('/get_autoFill')
+   .post(tutorials.get_autoFill)
 
    
 router.route('/update/')
@@ -42,7 +44,11 @@ router.route('/search_District')
 router.route('/search_Constituency')
    .post(tutorials.search_Constituency)
 
-   
+router.route('/search_candidate')
+   .post(tutorials.search_candidate)  
+router.route('/search_partybynames')
+   .post(tutorials.search_party)  
+
 //  router.route('/:id')
 //   .post(tutorials.findOne)
 

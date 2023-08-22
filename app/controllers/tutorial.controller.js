@@ -4,7 +4,7 @@ const Tutorial = db.tutorials;
 const summary = db.summary;
 const summary_region = db.summary_region;
 const summary_nation = db.summary_nation;
-
+const CandidateNames = db.candidate_name;
 const fs = require('fs');
 const {parse} = require('csv-parse');
 var csv = require("fast-csv");
@@ -660,7 +660,44 @@ exports.search_country = (req, res) => {
     });
   });
 };
+exports.get_autoFill = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
+  console.log(req.body.PSName);
+  if(req.body.PSName)
+  {
+    
+    Tutorial.findOne({PSName: req.body.PSName}).then(data => {
+        const newData = {
+          PSCode: data.PSCode,
+          PSName: data.PSName,
+      };
+      res.send(newData);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+  }
+  if(req.body.PSCode)
+  {
+      Tutorial.findOne({PSCode: req.body.PSCode}).then(data => {
+          const newData = {
+            PSCode: data.PSCode,
+            PSName: data.PSName,
+        };
+        res.send(newData);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while retrieving tutorials."
+        });
+      });
+  }
 
+};
 exports.search_Region = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
   Tutorial.distinct("Region", {Country:req.body.Country}).then(data => {
@@ -1031,4 +1068,35 @@ exports.finddetail = (req, res) => {
           err.message || "Some error occurred while retrieving tutorials."
       });
     });
+};
+
+exports.search_candidate = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
+  CandidateNames.distinct("Candiate").then(data => {
+    const newData = data.map(item => {
+      return {
+        title: item
+      };
+    });
+    res.send(newData);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving tutorials."
+    });
+  });
+};
+
+exports.search_party = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
+  CandidateNames.findOne("PartyInital", {Candiate:req.body.candidate}).then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving tutorials."
+    });
+  });
 };
