@@ -1090,7 +1090,7 @@ exports.search_candidate = (req, res) => {
 
 exports.search_party = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
-  CandidateNames.findOne("PartyInital", {Candiate:req.body.candidate}).then(data => {
+  CandidateNames.findOne({Candiate:req.body.candidate}).then(data => {
     res.send(data);
   })
   .catch(err => {
