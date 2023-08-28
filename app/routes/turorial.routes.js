@@ -15,8 +15,17 @@ const router = express.Router();
 
 router.route('/read')
    .post(tutorials.findAllPublished)
-router.route('/search')
+router.route('/search_PSName')
+   .post(tutorials.search_psname)
+   
+// router.route('/search_Pscode')
+//    .post(tutorials.search_pscode)
+
+
+router.route('/search')                                  
    .post(tutorials.findSearch)
+router.route('/get_PSName')
+   .post(tutorials.get_psname)
 
 router.route('/create')
    .post(tutorials.create)

@@ -10,132 +10,13 @@ const {parse} = require('csv-parse');
 var csv = require("fast-csv");
 const summary_regionModel = require("../models/summary_region.model");
 var stream = fs.createReadStream('Elections App1.csv');
-
 let lastUpdated;
 let page = 0;
 
-// const calc = ( baseUrl ) => {
-//   const idx = baseUrl.lastIndexOf("-");
-//   baseUrl = baseUrl.slice(6, idx) + "." + baseUrl.slice(idx + 1);
-//   return "https://cdn.sanity.io/images/u0v1th4q/production/" + baseUrl + "?rect,0,1830,900&auto=format";
-//   //"?rect=0,39,1920,1002&w=640&h=334&auto=format&w=3840&q=75";
-// }
-// // get data from server
-// const grabNewsFromServer = async () => {
-  
-//   await Tutorial.deleteMany();
-  
-//   lastUpdated = Date();
-
-//   page = 0;
-//   setTimeout(getPage, 10);
-// }
-
-
-// const getPage = () => {
-//   const url = 'https://www.futurepedia.io/api/tools?page=' + page + '&sort=verified';
-//   axios.get(url)
-//   .then(data => {
-//     const responseObject = data.data;
-//     console.log("Debug ================================> Received ", page, responseObject.length);
-    
-//     Tutorial.insertMany(responseObject.map( obj => ( {
-//       id: obj.id,
-//       duplictae: obj.duplicate,
-//       favCount: obj.favCount,
-//       image: calc(obj.mainImage.asset._ref),
-//       pricing: obj.pricing,
-//       publishedAt: obj.publishedAt,
-//       publishedAt_timestamp: obj.publishedAt_timestamp,
-//       reviewCount: obj.reviewStats.reviewCount,
-//       reviewScore: obj.reviewStats.reviewScore,
-//       socialLinks: obj.socialLinks,
-//       sponser: obj.sponsorOfTheDay,
-//       startingPrice: obj.startingPrice,
-//       status: obj.status,
-//       tagsIndex: obj.tagsIndex,
-//       toolCategories: obj.toolCategories,
-//       toolName: obj.toolName,
-//       toolShortDescription: obj.toolShortDescription,
-//       verified: obj.verified,
-//       verifiedReason: obj.verifiedReason,
-//       websiteUrl: obj.websiteUrl,
-//     } )));
-
-//     if(responseObject.length == 9){
-//       page ++;
-//       setTimeout(getPage, 10);
-//     } else {
-//       console.log("Debug ================================> Grabbing Ended : ", responseObject.length);
-//     }
-      
-//   })
-//   .catch(error => console.error(error));
-
-// }
-
-// //grab data from server on startup
-// grabNewsFromServer();
-
-// Create and Save a new Tutorial
-
-
-// Retrieve all Tutorials from the database.
-// exports.findAll = (req, res) => {
-//   console.log("API Request =========================================> FindAll");
-//   const title = req.query.title;
-//   var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
-
-//   Tutorial.find(condition)
-//     .then(data => {
-//       res.send(data);
-//     })
-//     .catch(err => {
-//       res
-//         .status(500)
-//         .send({
-//           message:
-//             err.message || "Some error occurred while retrieving tutorials."
-//         });
-//     });
-// };
-
-// // Find a single Tutorial with an id
-// exports.findOne = (req, res) => {
-//   console.log("API Request =========================================> FindOne");
-//   const now = Date();
-//   if (now - lastUpdated >= 24 * 60 * 60 * 1000){
-//     grabNewsFromServer();
-//   }
-
-//   const limit = req.params.id;
-//   let from = ( lastUpdated == req.lastUpdated
-//               ? Math.max( limit - 9, 0 )
-//               : 0 );
-  
-//   Tutorial.find()
-//     .skip(from)
-//     .limit(limit - from)
-//     .then(data => {
-//       res.send( { data: data, first: from } );
-//     })
-//     .catch(err => {
-//       res
-//         .status(500)
-//         .send("Error");
-//     })
-// };
-
-// Update a Tutorial by the id in the request
 exports.create = (req, res) => {
   console.log("API Request =========================================> Create");
-  // Validate request
-  // if (!req.body.title) {
-  //   res.status(400).send({ message: "Content can not be empty!" });
-  //   return;
-  // }
-   console.log(req.body);
-  // Create a Tutorial
+  console.log(req.body);
+
   const tutorial = new Tutorial({
     PSCode: req.body.PSCode,
     Constituency: req.body.Constituency,
@@ -162,13 +43,6 @@ exports.create = (req, res) => {
 
 exports.createdata = (req, res) => {
   console.log("API Request =========================================> Create");
-  // Validate request
-  // if (!req.body.title) {
-  //   res.status(400).send({ message: "Content can not be empty!" });
-  //   return;
-  // }
-
-
 };
 
 
@@ -181,112 +55,6 @@ exports.update = (req, res) => {
   }
 
   const id = req.params.id;
-
-
-  //   console.log(req.body);
-  //   const body = req.body;
-  //   const tableData= body.TableData;
-  //   let max=0, name="";
-  //    console.log(tableData);
-  //   tableData.map((rowData, rowIndex) => (
-  //     rowData.map((cellData, columnIndex) => {
-      
-  //       if(columnIndex === 3 && rowIndex<=8 && rowIndex>0&&max<tableData[rowIndex][3])
-  //       {
-          
-  //         max = tableData[rowIndex][3];
-  //         name = tableData[rowIndex][1];
-         
-  //       }
-  //     })
-  //   ));
-  //   console.log(name);
-  //   // console.log(name);
-  //   body.Winner = name;
-  
-
-  // Tutorial.updateOne({PSCode:req.body.PSCode}, req.body, { useFindAndModify: true })
-  //   .then(data => {
-
-  //   })  
-  //   .catch(err => {
-  //     // res.status(500).send({
-  //     //   message: "Error updating Tutorial with id=" + id
-  //     // });
-  //   });
-
-//     summary.findOneAndUpdate({PSCode:req.body.PSCode},{ $setOnInsert: { PSCode: req.body.PSCode ,
-//       Country:req.body.Country,
-//       Region: req.body.Region,
-//       District: req.body.District,
-//       Constituency: req.body.Constituency,
-//     } }, { upsert: true, new: true }, (error, summary) => {
-//       if (error) {
-//         console.error('Error finding document:', error);
-//         return;
-//       }
-//       res.send({ message: "Fine was updated successfully." });
-//       const candidates = [];
-//       const names = [];
-// //      console.log(req.body.TableData);
-//       const table = JSON.parse(req.body.TableData);
-//       for (let i = 1; i <= 8; i++) {
-//         const candidate = table[i][1];
-//         const val = table[i][3];
-// //        console.log(candidate);
-
-//         if (candidate !== null && candidate !== "") {
-//           if (!isNaN(val)) {
-//             candidates.push(candidate);
-//             names.push(val);  
-//           }
-//           else
-//           {
-//             candidates.push(candidate);
-//             names.push(0);  
-//           }
-
-//           const voteCountIndex = summary.VoteCount.findIndex((obj) => obj.name === candidate);
-//           if (voteCountIndex !== -1) {
-            
-//             console.log(voteCountIndex);
-//             console.log(names);
-//             summary.VoteCount[voteCountIndex].value = names[voteCountIndex-1];
-// //            console.log(candidate);
-
-//           }
-//           else
-//           {
-//             summary.VoteCount.push({name: candidate, value: names[voteCountIndex]});
-//            // console.log(candidate);
-//           }          
-//         }
-//         // console.log(summary);
-
-//       }
-
-//       // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
-    
-//       // if (index !== -1) {
-//       //   // If the value is found in the PartyData array
-//       //   // Update the VoteCount value for the corresponding index
-//       //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
-//       // } else {
-//       //   // If the value is not found in the PartyData array, push new data
-//       //   summary.PartyData.push(PartyDataFind);
-//       //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
-//       // }
-//         summary.save()
-//           .then(savedSummary => {
-//             console.log('Document updated:', savedSummary);
-
-            
-//           })
-//           .catch(saveError => {
-//             console.error('Error saving updated document:', saveError);
-//           });
-  
-//     });
   Tutorial.findOne({PSCode:req.body.PSCode})
     .then(data => {
       if (!data) {
@@ -294,11 +62,7 @@ exports.update = (req, res) => {
         res.status(404).send({
           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
         });
-        
-      
       } else {
-        // res.send({ message: "Tutorial was updated successfully." });
-
         summary.findOneAndUpdate({Constituency: data.Constituency},{ $setOnInsert: { 
           Country:data.Country,
           Region: data.Region,
@@ -342,10 +106,6 @@ exports.update = (req, res) => {
             }
             else
               val= '0';
-        
-         
-        //        console.log(candidate);
-        
             if (candidate !== null && candidate !== "") {
                 candidates.push(candidate);
                 names.push(val);  
@@ -366,30 +126,14 @@ exports.update = (req, res) => {
                 summary.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary.PartyData.push({name: candidate, value: party_val});
                 summary.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary.Sum)) * 100});
-        
-               // console.log(candidate);
+
               }          
             }
-            // console.log(summary);
-        
+
           }
-        
-          // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
-        
-          // if (index !== -1) {
-          //   // If the value is found in the PartyData array
-          //   // Update the VoteCount value for the corresponding index
-          //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
-          // } else {
-          //   // If the value is not found in the PartyData array, push new data
-          //   summary.PartyData.push(PartyDataFind);
-          //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
-          // }
             summary.save()
               .then(savedSummary => {
                 console.log('Document updated:', savedSummary);
-        
-                
               })
               .catch(saveError => {
                 console.error('Error saving updated document:', saveError);
@@ -422,7 +166,6 @@ exports.update = (req, res) => {
               let valful = parseInt(table[i][3]);
               console.log(valful);
               summary_region.Sum  = summary_region.Sum + parseInt(valful);
-         
              }
              else
              {
@@ -439,10 +182,6 @@ exports.update = (req, res) => {
             }
             else
               val= '0';
-        
-         
-        //        console.log(candidate);
-        
             if (candidate !== null && candidate !== "") {
                 candidates.push(candidate);
                 names.push(val);  
@@ -456,37 +195,18 @@ exports.update = (req, res) => {
               }
               else
               {
-             
                 console.log(val);
                 console.log(summary_region.Sum);   
                 summary_region.CandiDate.push(candidate);
                 summary_region.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary_region.PartyData.push({name: candidate, value: party_val});
                 summary_region.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary_region.Sum)) * 100});
-        
-               // console.log(candidate);
               }          
             }
-            // console.log(summary);
-        
           }
-        
-          // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
-        
-          // if (index !== -1) {
-          //   // If the value is found in the PartyData array
-          //   // Update the VoteCount value for the corresponding index
-          //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
-          // } else {
-          //   // If the value is not found in the PartyData array, push new data
-          //   summary.PartyData.push(PartyDataFind);
-          //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
-          // }
           summary_region.save()
               .then(savedSummary => {
-                console.log('Document updated:', savedSummary);
-        
-                
+                console.log('Document updated:', savedSummary);   
               })
               .catch(saveError => {
                 console.error('Error saving updated document:', saveError);
@@ -506,10 +226,7 @@ exports.update = (req, res) => {
           }
           const candidates = [];
           const names = [];
-        //      console.log(req.body.TableData);
-          // const table = JSON.parse(req.body.TableData);
           const {TableData} = req.body;
-
           const table=TableData;
           let sum_me = parseInt(summary_nation.Sum);
           for (let i = 1; i <= 8; i++) {
@@ -519,7 +236,6 @@ exports.update = (req, res) => {
               let valful = parseInt(table[i][3]);
               console.log(valful);
               summary_nation.Sum  = summary_nation.Sum + parseInt(valful);
-         
              }
              else
              {
@@ -536,14 +252,10 @@ exports.update = (req, res) => {
             }
             else
               val= '0';
-        
-         
-        //        console.log(candidate);
-        
+    
             if (candidate !== null && candidate !== "") {
-                candidates.push(candidate);
-                names.push(val);  
-        
+              candidates.push(candidate);
+              names.push(val);  
               const voteCountIndex = summary_nation.VoteCount.findIndex((obj) => obj.name === candidate);
               if (voteCountIndex !== -1) {
                 
@@ -553,32 +265,18 @@ exports.update = (req, res) => {
               }
               else
               {
-             
                 console.log(val);
                 console.log(summary_nation.Sum);   
                 summary_nation.CandiDate.push(candidate);
                 summary_nation.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary_nation.PartyData.push({name: candidate, value: party_val});
                 summary_nation.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary_nation.Sum)) * 100});
-        
-               // console.log(candidate);
               }          
             }
             // console.log(summary);
         
           }
         
-          // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
-        
-          // if (index !== -1) {
-          //   // If the value is found in the PartyData array
-          //   // Update the VoteCount value for the corresponding index
-          //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
-          // } else {
-          //   // If the value is not found in the PartyData array, push new data
-          //   summary.PartyData.push(PartyDataFind);
-          //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
-          // }
           summary_nation.save()
               .then(savedSummary => {
                 console.log('Document updated:', savedSummary);
@@ -594,19 +292,12 @@ exports.update = (req, res) => {
 
     })  
     .catch(err => {
-      // res.status(500).send({
-      //   message: "Error updating Tutorial with id=" + id
-      // });
     });
-
-
-
 };
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
-
   Tutorial.findByIdAndRemove(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
@@ -751,27 +442,15 @@ exports.search_Constituency = (req, res) => {
     });
   });
 };
-// exports.search_District = (req, res) => {
-//   console.log("API Request =========================================> FindAllPublished");
-//   Tutorial.distinct("District", {Region:req.body.Region}, function(err, data) {
-//     if (err) {
-//       console.error(err);
-//       return;
-//     }
-//     console.log(data);
-//   });
-// };
-
-
-
-exports.findAllPublished = (req, res) => {
+exports.search_psname = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
 
-  const pageSize = 10; // Number of items to retrieve in each page
+  const pageSize = 30; // Number of items to retrieve in each page
   const currentPage = req.body.Page || 1; // Get the requested page number from the query parameter
 
   console.log(req.body.Page);
-  Tutorial.find({})
+
+  Tutorial.find({PSName: { $regex: req.body.PSName, $options: "i" }})
     .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
     .skip((currentPage - 1) * pageSize) // Skip the appropriate number of items based on the page number
     .limit(pageSize) // Retrieve only the desired number of items
@@ -779,12 +458,35 @@ exports.findAllPublished = (req, res) => {
       const newData = data.map(item => {
         console.log(item);
         return {
-          PSCode: item.PSCode,
           PSName: item.PSName,
-          Region: item.Region,
-          District: item.District,
-          Constituency: item.Constituency,
-          Winner: item.Winner
+        };
+      });
+      res.send(newData);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+}
+
+exports.findAllPublished = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
+
+  const pageSize = 10000; // Number of items to retrieve in each page
+  const currentPage = req.body.Page || 1; // Get the requested page number from the query parameter
+
+  console.log(req.body.Page);
+
+  Tutorial.find({PSName: req.body.name})
+    .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
+    .skip((currentPage - 1) * pageSize) // Skip the appropriate number of items based on the page number
+    .limit(pageSize) // Retrieve only the desired number of items
+    .then(data => {
+      const newData = data.map(item => {
+        console.log(item);
+        return {
+          PSName: item.PSName,
         };
       });
       res.send(newData);
@@ -798,203 +500,16 @@ exports.findAllPublished = (req, res) => {
 
 exports.findSearch = (req, res) => {
   console.log("API Request =========================================> FindSearch");
-
-
   const pageSize = 10; // Number of items to retrieve in each page
   const currentPage = req.body.Page || 1; // Get the requested page number from the query parameter
-
   console.log(req.body.Page);
   console.log(req.body.Region);
   console.log(req.body.Constituency);
-
-  // // req.body.Region !== null
-  // // ? Tutorial.find(req.body.District === null ? { Region: req.body.Region, District: req.body.District } : { Region: req.body.Region })
-  // // : Tutorial.find({}).then(data => {
-  // // if(!req.body.Region)
-  // // {
-  // //   Tutorial.find({}).then(data => {
-  // //     const newData = data.map(item => {
-  // //       return {
-  // //         PSCode: item.PSCode,
-  // //         PSName: item.PSName,
-  // //         Region: item.Region,
-  // //         District: item.District,
-  // //         Constituency: item.Constituency,
-  // //         Winner: item.Winner   
-  // //       };
-  // //     });
-  // //     res.send(newData);
-  // //   })
-  // //   .catch(err => {
-  // //     res.status(500).send({
-  // //       message:
-  // //         err.message || "Some error occurred while retrieving tutorials."
-  // //     });
-  // //   });
-  // // }
-  // // else if (!req.body.District)
-  // // {
-  // //   console.log("fool1");
-  // //   Tutorial.find({Region: req.body.Region}).then(data => {
-  // //     const newData = data.map(item => {
-  // //       return {
-  // //         PSCode: item.PSCode,
-  // //         PSName: item.PSName,
-  // //         Region: item.Region,
-  // //         District: item.District,
-  // //         Constituency: item.Constituency,
-  // //         Winner: item.Winner   
-  // //       };
-  // //     });
-  // //     res.send(newData);
-  // //   })
-  // //   .catch(err => {
-  // //     res.status(500).send({
-  // //       message:
-  // //         err.message || "Some error occurred while retrieving tutorials."
-  // //     });
-  // //   });
-  // // }
-  // // else {
-  // //   Tutorial.find({Region: req.body.Region, District: req.body.District}).then(data => {
-  // //     con`st newData = data.map(item => {
-  // //       return {
-  // //         PSCode: item.PSCode,
-  // //         PSName: item.PSName,
-  // //         Region: item.Region,
-  // //         District: item.District,
-  // //         Constituency: item.Constituency,
-  // //         Winner: item.Winner   
-  // //       };
-  // //     });
-  // //     res.send(newData);
-  // //   })
-  // //   .catch(err => {
-  // //     res.status(500).send({
-  // //       message:
-  // //         err.message || "Some error occurred while retrieving tutorials."
-  // //     });
-  // //   });
-  // // }
-
-  
-  // const query = !req.body.Region ? {} : { Region: req.body.Region };
-
-  // if (req.body.Constituency) {
-  //   query.Constituency = req.body.Constituency;
-  // }
-  // else if(req.body.District) {
-  //   query.District = req.body.District;
-  // }
-
-  // Tutorial.find(query)
-  //   .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
-  //   .skip((currentPage - 1) * pageSize) // Skip the appropriate number of items based on the page number
-  //   .limit(pageSize) // Retrieve only the desired number of items
-  //   .then(data => {
-  //     const newData = data.map(item => {
-  //       console.log(item);
-  //       return {
-  //         PSCode: item.PSCode,
-  //         PSName: item.PSName,
-  //         Region: item.Region,
-  //         District: item.District,
-  //         Constituency: item.Constituency,
-  //         Winner: item.Winner
-  //       };
-  //     });
-  //     res.send(newData);
-  //   })
-  //   .catch(err => {
-  //     res.status(500).send({
-  //       message: err.message || "Some error occurred while retrieving tutorials."
-  //     });
-  //   });
-
-
-  
-  // const pageSize = 10; // Number of items to retrieve in each page
-  // const currentPage = req.body.Page || 1; // Get the requested page number from the query parameter
-
   console.log(req.body.Page);
   console.log(req.body.Region);
   console.log(req.body.Constituency);
-
-  // req.body.Region !== null
-  // ? Tutorial.find(req.body.District === null ? { Region: req.body.Region, District: req.body.District } : { Region: req.body.Region })
-  // : Tutorial.find({}).then(data => {
-  // if(!req.body.Region)
-  // {
-  //   Tutorial.find({}).then(data => {
-  //     const newData = data.map(item => {
-  //       return {
-  //         PSCode: item.PSCode,
-  //         PSName: item.PSName,
-  //         Region: item.Region,
-  //         District: item.District,
-  //         Constituency: item.Constituency,
-  //         Winner: item.Winner   
-  //       };
-  //     });
-  //     res.send(newData);
-  //   })
-  //   .catch(err => {
-  //     res.status(500).send({
-  //       message:
-  //         err.message || "Some error occurred while retrieving tutorials."
-  //     });
-  //   });
-  // }
-  // else if (!req.body.District)
-  // {
-  //   console.log("fool1");
-  //   Tutorial.find({Region: req.body.Region}).then(data => {
-  //     const newData = data.map(item => {
-  //       return {
-  //         PSCode: item.PSCode,
-  //         PSName: item.PSName,
-  //         Region: item.Region,
-  //         District: item.District,
-  //         Constituency: item.Constituency,
-  //         Winner: item.Winner   
-  //       };
-  //     });
-  //     res.send(newData);
-  //   })
-  //   .catch(err => {
-  //     res.status(500).send({
-  //       message:
-  //         err.message || "Some error occurred while retrieving tutorials."
-  //     });
-  //   });
-  // }
-  // else {
-  //   Tutorial.find({Region: req.body.Region, District: req.body.District}).then(data => {
-  //     con`st newData = data.map(item => {
-  //       return {
-  //         PSCode: item.PSCode,
-  //         PSName: item.PSName,
-  //         Region: item.Region,
-  //         District: item.District,
-  //         Constituency: item.Constituency,
-  //         Winner: item.Winner   
-  //       };
-  //     });
-  //     res.send(newData);
-  //   })
-  //   .catch(err => {
-  //     res.status(500).send({
-  //       message:
-  //         err.message || "Some error occurred while retrieving tutorials."
-  //     });
-  //   });
-  // }
-
   let val = [];
-
-  // Create an array to store the promises
   let promises = [];
-  
   if (req.body.Constituency) {
     // Push the promise to retrieve the summary into the promises array
     promises.push(
@@ -1010,7 +525,6 @@ exports.findSearch = (req, res) => {
   }
   
   if (req.body.Region) {
-    // Push the promise to retrieve the summary_region into the promises array
     promises.push(
       summary_region.findOne({ Region: req.body.Region })
         .then(item => {
@@ -1024,7 +538,6 @@ exports.findSearch = (req, res) => {
   }
   
   if (req.body.Country) {
-    // Push the promise to retrieve the summary_nation into the promises array
     promises.push(
       summary_nation.findOne({ Country: req.body.Country })
         .then(item => {
@@ -1036,7 +549,6 @@ exports.findSearch = (req, res) => {
         })
     );
   }
-  
   // Await all promises to resolve using Promise.all
   Promise.all(promises)
     .then(() => {
@@ -1049,11 +561,6 @@ exports.findSearch = (req, res) => {
         message: err.message || "Some error occurred while retrieving tutorials."
       });
     });
-
-
- 
-
-
 };
 exports.finddetail = (req, res) => {
   console.log("API Request =========================================> Finddetail");
@@ -1079,6 +586,20 @@ exports.search_candidate = (req, res) => {
       };
     });
     res.send(newData);
+  })
+  .catch(err => {   
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving tutorials."
+    });
+  });
+};
+exports.get_psname = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
+  Tutorial.find({}).then(data => {
+    data.map(item => {
+       res.send({name: item.PSName});
+    })
   })
   .catch(err => {
     res.status(500).send({
