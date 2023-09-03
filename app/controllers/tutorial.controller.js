@@ -65,7 +65,7 @@ exports.update = (req, res) => {
       } else {
         summary.findOneAndUpdate({Constituency: data.Constituency},{ $setOnInsert: { 
           Country:data.Country,
-          Region: data.Region,
+          Region: data.Region, 
           District: data.District,
           Constituency: data.Constituency,
         } }, { upsert: true, new: true }, (error, summary) => {
@@ -354,13 +354,14 @@ exports.search_country = (req, res) => {
 exports.get_autoFill = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
   console.log(req.body.PSName);
-  if(req.body.PSName)
+  if(req.body.PSCode)
   {
     
-    Tutorial.findOne({PSName: req.body.PSName}).then(data => {
+    Tutorial.findOne({PSCode: req.body.PSCode}).then(data => {
         const newData = {
           PSCode: data.PSCode,
           PSName: data.PSName,
+          Constituency: data.Constituency,
       };
       res.send(newData);
     })
@@ -371,22 +372,22 @@ exports.get_autoFill = (req, res) => {
       });
     });
   }
-  if(req.body.PSCode)
-  {
-      Tutorial.findOne({PSCode: req.body.PSCode}).then(data => {
-          const newData = {
-            PSCode: data.PSCode,
-            PSName: data.PSName,
-        };
-        res.send(newData);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving tutorials."
-        });
-      });
-  }
+  // if(req.body.PSCode)
+  // {
+  //     Tutorial.findOne({PSCode: req.body.PSCode}).then(data => {
+  //         const newData = {
+  //           PSCode: data.PSCode,
+  //           PSName: data.PSName,
+  //       };
+  //       res.send(newData);
+  //     })
+  //     .catch(err => {
+  //       res.status(500).send({
+  //         message:
+  //           err.message || "Some error occurred while retrieving tutorials."
+  //       });
+  //     });
+  // }
 
 };
 exports.search_Region = (req, res) => {
@@ -469,7 +470,33 @@ exports.search_psname = (req, res) => {
       });
     });
 }
+exports.search_psCode = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
 
+  const pageSize = 5; // Number of items to retrieve in each page
+  const currentPage = req.body.Page || 1; // Get the requested page number from the query parameter
+
+  console.log(req.body.Page);
+
+  Tutorial.find({PSCode: { $regex: req.body.PSCode, $options: "i" }})
+    .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
+    .skip((currentPage - 1) * pageSize) // Skip the appropriate number of items based on the page number
+    .limit(pageSize) // Retrieve only the desired number of items
+    .then(data => {
+      const newData = data.map(item => {
+        console.log(item);
+        return {
+          PSCode: item.PSCode,
+        };
+      });
+      res.send(newData);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+}
 exports.findAllPublished = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
 

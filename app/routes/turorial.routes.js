@@ -17,6 +17,9 @@ router.route('/read')
    .post(tutorials.findAllPublished)
 router.route('/search_PSName')
    .post(tutorials.search_psname)
+router.route('/search_psCode')
+   .post(tutorials.search_psCode)
+
    
 // router.route('/search_Pscode')
 //    .post(tutorials.search_pscode)
