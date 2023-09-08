@@ -55,7 +55,7 @@ exports.update = (req, res) => {
   }
 
   const id = req.params.id;
-  Tutorial.findOne({PSCode:req.body.PSCode})
+  Tutorial.findOneAndUpdate({PSCode:req.body.PSCode},req.body, { useFindAndModify: true })
     .then(data => {
       if (!data) {
         console.log(data);
@@ -63,6 +63,7 @@ exports.update = (req, res) => {
           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
         });
       } else {
+        res.send({ message: "Tutorial was updated successfully." });
         summary.findOneAndUpdate({Constituency: data.Constituency},{ $setOnInsert: { 
           Country:data.Country,
           Region: data.Region, 
@@ -287,7 +288,14 @@ exports.update = (req, res) => {
               });
         
         });
-
+        // Tutorial.save()
+        //       .then(savedSummary => {
+        //         console.log('Document updated:', savedSummary);
+        
+        //       })
+        //       .catch(saveError => {
+        //         console.error('Error saving updated document:', saveError);
+        //       });
       }
 
     })  

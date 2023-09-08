@@ -17,6 +17,7 @@ module.exports = mongoose => {
       TableData5: { type: [String], default: null },
       MyDate: {type: Date, default:null},
       PollyType: {type: String, default: null},
+      Image: {type: String, default: null}
     },
     { timestamps: true }
   );
