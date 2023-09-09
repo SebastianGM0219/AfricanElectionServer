@@ -515,8 +515,6 @@ exports.update = (req, res) => {
              else
              {
                valful= 0;
- 
-               break;
              }             
           }
         

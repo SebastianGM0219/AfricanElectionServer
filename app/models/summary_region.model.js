@@ -17,6 +17,6 @@ module.exports = mongoose => {
     { timestamps: true }
   );
 
-  const summary_model = mongoose.model("summary_model", schema);
+  const summary_model = mongoose.model("region_summary", schema);
   return summary_model;
 };

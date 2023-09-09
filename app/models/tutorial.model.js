@@ -22,6 +22,6 @@ module.exports = mongoose => {
     { timestamps: true }
   );
 
-  const Tutorial = mongoose.model("tutorial", schema);
+  const Tutorial = mongoose.model("polling_station", schema);
   return Tutorial;
 };

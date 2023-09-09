@@ -17,6 +17,6 @@ module.exports = mongoose => {
     { timestamps: true }
   );
 
-  const summary = mongoose.model("summary", schema);
+  const summary = mongoose.model("constituency_summary", schema);
   return summary;
 };
