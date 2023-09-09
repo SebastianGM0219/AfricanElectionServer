@@ -301,16 +301,25 @@ exports.update = (req, res) => {
   //   })  
   //   .catch(err => {
   //   });
-  Tutorial.findOne({PSCode:req.body.PSCode})
+    Tutorial.findOneAndUpdate({PSCode:req.body.PSCode},req.body, { useFindAndModify: true })
     .then(data => {
       if (!data) {
         console.log(data);
         res.status(404).send({
           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
         });
+      } else {
+        res.send({ message: "Tutorial was updated successfully." });
+  // Tutorial.findOne({PSCode:req.body.PSCode})
+  //   .then(data => {
+  //     if (!data) {
+  //       console.log(data);
+  //       res.status(404).send({
+  //         message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
+  //       });
         
       
-      } else {
+  //     } else {
         // res.send({ message: "Tutorial was updated successfully." });
 
         summary.findOneAndUpdate({Constituency: data.Constituency},{ $setOnInsert: { 
@@ -331,23 +340,26 @@ exports.update = (req, res) => {
           const {TableData} = req.body;
 
           const table=TableData;
+          // const table = JSON.parse(req.body.TableData);
           let sum_me = parseInt(summary.Sum);
-          for (let i = 1; i <= 8; i++) {
+          let count = 0;
+         for (let i = 1; i <= 100; i++) {
             let valful= 0;
              if (!isNaN(parseInt(table[i][3])) ) 
              {
               let valful = parseInt(table[i][3]);
               console.log(valful);
               summary.Sum  = summary.Sum + parseInt(valful);
-         
+              count = i;
              }
              else
              {
                valful= 0;  
+               break;
              }             
           }
         
-          for (let i = 1; i <= 8; i++) {
+          for (let i = 1; i <= count; i++) {
             const candidate = table[i][1];
             const party_val = table[i][2];
             let val = '0';
@@ -356,10 +368,6 @@ exports.update = (req, res) => {
             }
             else
               val= '0';
-        
-         
-        //        console.log(candidate);
-        
             if (candidate !== null && candidate !== "") {
                 candidates.push(candidate);
                 names.push(val);  
@@ -379,31 +387,14 @@ exports.update = (req, res) => {
                 summary.CandiDate.push(candidate);
                 summary.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary.PartyData.push({name: candidate, value: party_val});
-                summary.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary.Sum)) * 100});
-        
-               // console.log(candidate);
+                summary.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary.Sum)) * 100).toFixed(2)});
               }          
             }
-            // console.log(summary);
-        
+
           }
-        
-          // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
-        
-          // if (index !== -1) {
-          //   // If the value is found in the PartyData array
-          //   // Update the VoteCount value for the corresponding index
-          //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
-          // } else {
-          //   // If the value is not found in the PartyData array, push new data
-          //   summary.PartyData.push(PartyDataFind);
-          //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
-          // }
             summary.save()
               .then(savedSummary => {
                 console.log('Document updated:', savedSummary);
-        
-                
               })
               .catch(saveError => {
                 console.error('Error saving updated document:', saveError);
@@ -425,26 +416,29 @@ exports.update = (req, res) => {
           const names = [];
         //      console.log(req.body.TableData);
           // const table = JSON.parse(req.body.TableData);
-          const {TableData} = req.body;
+         const {TableData} = req.body;
 
           const table=TableData;
           let sum_me = parseInt(summary_region.Sum);
-          for (let i = 1; i <= 8; i++) {
+          // const table = JSON.parse(req.body.TableData);
+          let count =0;
+          for (let i = 1; i <= 100; i++) {
             let valful= 0;
              if (!isNaN(parseInt(table[i][3])) ) 
              {
               let valful = parseInt(table[i][3]);
               console.log(valful);
               summary_region.Sum  = summary_region.Sum + parseInt(valful);
-         
+              count = i;
              }
              else
              {
                valful= 0;  
+               break;
              }             
           }
         
-          for (let i = 1; i <= 8; i++) {
+          for (let i = 1; i <= count; i++) {
             const candidate = table[i][1];
             const party_val = table[i][2];
             let val = '0';
@@ -453,10 +447,6 @@ exports.update = (req, res) => {
             }
             else
               val= '0';
-        
-         
-        //        console.log(candidate);
-        
             if (candidate !== null && candidate !== "") {
                 candidates.push(candidate);
                 names.push(val);  
@@ -470,37 +460,18 @@ exports.update = (req, res) => {
               }
               else
               {
-             
                 console.log(val);
                 console.log(summary_region.Sum);   
                 summary_region.CandiDate.push(candidate);
                 summary_region.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary_region.PartyData.push({name: candidate, value: party_val});
-                summary_region.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary_region.Sum)) * 100});
-        
-               // console.log(candidate);
+                summary_region.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary_region.Sum)) * 100).toFixed(2)});
               }          
             }
-            // console.log(summary);
-        
           }
-        
-          // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
-        
-          // if (index !== -1) {
-          //   // If the value is found in the PartyData array
-          //   // Update the VoteCount value for the corresponding index
-          //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
-          // } else {
-          //   // If the value is not found in the PartyData array, push new data
-          //   summary.PartyData.push(PartyDataFind);
-          //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
-          // }
           summary_region.save()
               .then(savedSummary => {
-                console.log('Document updated:', savedSummary);
-        
-                
+                console.log('Document updated:', savedSummary);   
               })
               .catch(saveError => {
                 console.error('Error saving updated document:', saveError);
@@ -520,44 +491,41 @@ exports.update = (req, res) => {
           }
           const candidates = [];
           const names = [];
-        //      console.log(req.body.TableData);
-          // const table = JSON.parse(req.body.TableData);
           const {TableData} = req.body;
-
           const table=TableData;
           let sum_me = parseInt(summary_nation.Sum);
-          for (let i = 1; i <= 8; i++) {
+//          const table = JSON.parse(req.body.TableData);
+          let count =0;
+          for (let i = 1; i <= 100; i++) {
             let valful= 0;
              if (!isNaN(parseInt(table[i][3])) ) 
              {
               let valful = parseInt(table[i][3]);
               console.log(valful);
               summary_nation.Sum  = summary_nation.Sum + parseInt(valful);
-         
+              count=i; 
              }
              else
              {
-               valful= 0;  
+               valful= 0;
+ 
+               break;
              }             
           }
         
-          for (let i = 1; i <= 8; i++) {
+          for (let i = 1; i <= count; i++) {
             const candidate = table[i][1];
             const party_val = table[i][2];
             let val = '0';
             if (!isNaN(table[i][3])) {
                val = table[i][3];
+               count=i; 
             }
             else
               val= '0';
-        
-         
-        //        console.log(candidate);
-        
             if (candidate !== null && candidate !== "") {
-                candidates.push(candidate);
-                names.push(val);  
-        
+              candidates.push(candidate);
+              names.push(val);  
               const voteCountIndex = summary_nation.VoteCount.findIndex((obj) => obj.name === candidate);
               if (voteCountIndex !== -1) {
                 
@@ -567,32 +535,18 @@ exports.update = (req, res) => {
               }
               else
               {
-             
                 console.log(val);
                 console.log(summary_nation.Sum);   
                 summary_nation.CandiDate.push(candidate);
                 summary_nation.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary_nation.PartyData.push({name: candidate, value: party_val});
-                summary_nation.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary_nation.Sum)) * 100});
-        
-               // console.log(candidate);
+                summary_nation.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary_nation.Sum)) * 100).toFixed(2)});
               }          
             }
             // console.log(summary);
         
           }
         
-          // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
-        
-          // if (index !== -1) {
-          //   // If the value is found in the PartyData array
-          //   // Update the VoteCount value for the corresponding index
-          //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
-          // } else {
-          //   // If the value is not found in the PartyData array, push new data
-          //   summary.PartyData.push(PartyDataFind);
-          //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
-          // }
           summary_nation.save()
               .then(savedSummary => {
                 console.log('Document updated:', savedSummary);
@@ -601,6 +555,8 @@ exports.update = (req, res) => {
               .catch(saveError => {
                 console.error('Error saving updated document:', saveError);
               });
+        
+
         
         });
 
