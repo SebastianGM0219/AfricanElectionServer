@@ -225,10 +225,9 @@ exports.update = (req, res) => {
           }
           const candidates = [];
           const names = [];
-          // const {TableData} = req.body;
-          // const table=TableData;
-          const table = JSON.parse(req.body.TableData);
-
+          const {TableData} = req.body;
+          const table=TableData;
+                
           let sum_me = parseInt(summary_nation.Sum);
           for (let i = 1; i <= 8; i++) {
             let valful= 0;
@@ -288,7 +287,7 @@ exports.update = (req, res) => {
               });
         
         });
-                  res.send({ message: "Fine was updated successfully." });
+                  // res.send({ message: "Fine was updated successfully." });
 
         // Tutorial.save()
         //       .then(savedSummary => {
