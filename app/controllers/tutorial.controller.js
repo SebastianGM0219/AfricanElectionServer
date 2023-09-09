@@ -332,7 +332,8 @@ exports.update = (req, res) => {
             console.error('Error finding document:', error);
             return;
           }
-          res.send({ message: "Fine was updated successfully." });
+          // res.send({ message: "Fine was updated successfully." });
+
           const candidates = [];
           const names = [];
         //      console.log(req.body.TableData);
@@ -345,6 +346,8 @@ exports.update = (req, res) => {
           let count = 0;
          for (let i = 1; i <= 100; i++) {
             let valful= 0;
+            if(!table[i])
+              break;
              if (!isNaN(parseInt(table[i][3])) ) 
              {
               let valful = parseInt(table[i][3]);
@@ -424,18 +427,20 @@ exports.update = (req, res) => {
           let count =0;
           for (let i = 1; i <= 100; i++) {
             let valful= 0;
-             if (!isNaN(parseInt(table[i][3])) ) 
+            if(!table[i])
+              break;
+           if (!isNaN(parseInt(table[i][3])) ) 
              {
               let valful = parseInt(table[i][3]);
               console.log(valful);
               summary_region.Sum  = summary_region.Sum + parseInt(valful);
               count = i;
+              console.log(i);
              }
              else
              {
                valful= 0;  
-               break;
-             }             
+             }                           
           }
         
           for (let i = 1; i <= count; i++) {
@@ -494,10 +499,12 @@ exports.update = (req, res) => {
           const {TableData} = req.body;
           const table=TableData;
           let sum_me = parseInt(summary_nation.Sum);
-//          const table = JSON.parse(req.body.TableData);
+          // const table = JSON.parse(req.body.TableData);
           let count =0;
           for (let i = 1; i <= 100; i++) {
             let valful= 0;
+            if(!table[i])
+              break;
              if (!isNaN(parseInt(table[i][3])) ) 
              {
               let valful = parseInt(table[i][3]);
@@ -517,6 +524,7 @@ exports.update = (req, res) => {
             const candidate = table[i][1];
             const party_val = table[i][2];
             let val = '0';
+            
             if (!isNaN(table[i][3])) {
                val = table[i][3];
                count=i; 
@@ -554,10 +562,7 @@ exports.update = (req, res) => {
               })
               .catch(saveError => {
                 console.error('Error saving updated document:', saveError);
-              });
-        
-
-        
+              });        
         });
 
       }
