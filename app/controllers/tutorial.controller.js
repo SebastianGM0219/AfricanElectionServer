@@ -55,18 +55,267 @@ exports.update = (req, res) => {
   }
 
   const id = req.params.id;
-  Tutorial.findOneAndUpdate({PSCode:req.body.PSCode},req.body, { useFindAndModify: true })
+  // Tutorial.findOneAndUpdate({PSCode:req.body.PSCode},req.body, { useFindAndModify: true })
+  //   .then(data => {
+  //     if (!data) {
+  //       console.log(data);
+  //       res.status(404).send({
+  //         message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
+  //       });
+  //     } else {
+  //       res.send({ message: "Tutorial was updated successfully." });
+  //       summary.findOneAndUpdate({Constituency: data.Constituency},{ $setOnInsert: { 
+  //         Country:data.Country,
+  //         Region: data.Region, 
+  //         District: data.District,
+  //         Constituency: data.Constituency,
+  //       } }, { upsert: true, new: true }, (error, summary) => {
+  //         if (error) {
+  //           console.error('Error finding document:', error);
+  //           return;
+  //         }
+  //         res.send({ message: "Fine was updated successfully." });
+  //         const candidates = [];
+  //         const names = [];
+  //       //      console.log(req.body.TableData);
+  //         // const {table} = req.body.TableData;
+  //         // const {TableData} = req.body;
+
+  //         // const table=TableData;
+  //         const table = JSON.parse(req.body.TableData);
+  //         let sum_me = parseInt(summary.Sum);
+  //         for (let i = 1; i <= 8; i++) {
+  //           let valful= 0;
+  //            if (!isNaN(parseInt(table[i][3])) ) 
+  //            {
+  //             let valful = parseInt(table[i][3]);
+  //             console.log(valful);
+  //             summary.Sum  = summary.Sum + parseInt(valful);
+         
+  //            }
+  //            else
+  //            {
+  //              valful= 0;  
+  //            }             
+  //         }
+        
+  //         for (let i = 1; i <= 8; i++) {
+  //           const candidate = table[i][1];
+  //           const party_val = table[i][2];
+  //           let val = '0';
+  //           if (!isNaN(table[i][3])) {
+  //              val = table[i][3];
+  //           }
+  //           else
+  //             val= '0';
+  //           if (candidate !== null && candidate !== "") {
+  //               candidates.push(candidate);
+  //               names.push(val);  
+        
+  //             const voteCountIndex = summary.VoteCount.findIndex((obj) => obj.name === candidate);
+  //             if (voteCountIndex !== -1) {
+                
+  //               console.log(voteCountIndex);
+  //               console.log(names);
+  //               summary.VoteCount[voteCountIndex].value = parseInt(summary.VoteCount[voteCountIndex].value) + parseInt(val);
+  //             }
+  //             else
+  //             {
+             
+  //               console.log(val);
+  //               console.log(summary.Sum);   
+  //               summary.CandiDate.push(candidate);
+  //               summary.VoteCount.push({name: candidate, value: parseInt(val)});
+  //               summary.PartyData.push({name: candidate, value: party_val});
+  //               summary.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary.Sum)) * 100).toFixed(2)});
+  //             }          
+  //           }
+
+  //         }
+  //           summary.save()
+  //             .then(savedSummary => {
+  //               console.log('Document updated:', savedSummary);
+  //             })
+  //             .catch(saveError => {
+  //               console.error('Error saving updated document:', saveError);
+  //             });
+        
+  //       });
+
+  //       summary_region.findOneAndUpdate({Region: data.Region},{ $setOnInsert: { 
+  //         Country:data.Country,
+  //         Region: data.Region,
+  //         District: data.District,
+  //         Constituency: data.Constituency,
+  //       } }, { upsert: true, new: true }, (error, summary_region) => {
+  //         if (error) {
+  //           console.error('Error finding document:', error);
+  //           return;
+  //         }
+  //         const candidates = [];
+  //         const names = [];
+  //       //      console.log(req.body.TableData);
+  //         // const table = JSON.parse(req.body.TableData);
+  //         const {TableData} = req.body;
+
+  //         const table=TableData;
+  //         let sum_me = parseInt(summary_region.Sum);
+  //         for (let i = 1; i <= 8; i++) {
+  //           let valful= 0;
+  //            if (!isNaN(parseInt(table[i][3])) ) 
+  //            {
+  //             let valful = parseInt(table[i][3]);
+  //             console.log(valful);
+  //             summary_region.Sum  = summary_region.Sum + parseInt(valful);
+  //            }
+  //            else
+  //            {
+  //              valful= 0;  
+  //            }             
+  //         }
+        
+  //         for (let i = 1; i <= 8; i++) {
+  //           const candidate = table[i][1];
+  //           const party_val = table[i][2];
+  //           let val = '0';
+  //           if (!isNaN(table[i][3])) {
+  //              val = table[i][3];
+  //           }
+  //           else
+  //             val= '0';
+  //           if (candidate !== null && candidate !== "") {
+  //               candidates.push(candidate);
+  //               names.push(val);  
+        
+  //             const voteCountIndex = summary_region.VoteCount.findIndex((obj) => obj.name === candidate);
+  //             if (voteCountIndex !== -1) {
+                
+  //               console.log(voteCountIndex);
+  //               console.log(names);
+  //               summary_region.VoteCount[voteCountIndex].value = parseInt(summary_region.VoteCount[voteCountIndex].value) + parseInt(val);
+  //             }
+  //             else
+  //             {
+  //               console.log(val);
+  //               console.log(summary_region.Sum);   
+  //               summary_region.CandiDate.push(candidate);
+  //               summary_region.VoteCount.push({name: candidate, value: parseInt(val)});
+  //               summary_region.PartyData.push({name: candidate, value: party_val});
+  //               summary_region.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary_region.Sum)) * 100).toFixed(2)});
+  //             }          
+  //           }
+  //         }
+  //         summary_region.save()
+  //             .then(savedSummary => {
+  //               console.log('Document updated:', savedSummary);   
+  //             })
+  //             .catch(saveError => {
+  //               console.error('Error saving updated document:', saveError);
+  //             });
+        
+  //       });
+
+  //       summary_nation.findOneAndUpdate({Country: data.Country},{ $setOnInsert: { 
+  //         Country:data.Country,
+  //         Region: data.Region,
+  //         District: data.District,
+  //         Constituency: data.Constituency,
+  //       } }, { upsert: true, new: true }, (error, summary_nation) => {
+  //         if (error) {
+  //           console.error('Error finding document:', error);
+  //           return;
+  //         }
+  //         const candidates = [];
+  //         const names = [];
+  //         const {TableData} = req.body;
+  //         const table=TableData;
+  //         let sum_me = parseInt(summary_nation.Sum);
+  //         for (let i = 1; i <= 8; i++) {
+  //           let valful= 0;
+  //            if (!isNaN(parseInt(table[i][3])) ) 
+  //            {
+  //             let valful = parseInt(table[i][3]);
+  //             console.log(valful);
+  //             summary_nation.Sum  = summary_nation.Sum + parseInt(valful);
+  //            }
+  //            else
+  //            {
+  //              valful= 0;  
+  //            }             
+  //         }
+        
+  //         for (let i = 1; i <= 8; i++) {
+  //           const candidate = table[i][1];
+  //           const party_val = table[i][2];
+  //           let val = '0';
+  //           if (!isNaN(table[i][3])) {
+  //              val = table[i][3];
+  //           }
+  //           else
+  //             val= '0';
+    
+  //           if (candidate !== null && candidate !== "") {
+  //             candidates.push(candidate);
+  //             names.push(val);  
+  //             const voteCountIndex = summary_nation.VoteCount.findIndex((obj) => obj.name === candidate);
+  //             if (voteCountIndex !== -1) {
+                
+  //               console.log(voteCountIndex);
+  //               console.log(names);
+  //               summary_nation.VoteCount[voteCountIndex].value = parseInt(summary_nation.VoteCount[voteCountIndex].value) + parseInt(val);
+  //             }
+  //             else
+  //             {
+  //               console.log(val);
+  //               console.log(summary_nation.Sum);   
+  //               summary_nation.CandiDate.push(candidate);
+  //               summary_nation.VoteCount.push({name: candidate, value: parseInt(val)});
+  //               summary_nation.PartyData.push({name: candidate, value: party_val});
+  //               summary_nation.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary_nation.Sum)) * 100).toFixed(2)});
+  //             }          
+  //           }
+  //           // console.log(summary);
+        
+  //         }
+        
+  //         summary_nation.save()
+  //             .then(savedSummary => {
+  //               console.log('Document updated:', savedSummary);
+        
+  //             })
+  //             .catch(saveError => {
+  //               console.error('Error saving updated document:', saveError);
+  //             });
+        
+  //       });
+  //       // Tutorial.save()
+  //       //       .then(savedSummary => {
+  //       //         console.log('Document updated:', savedSummary);
+        
+  //       //       })
+  //       //       .catch(saveError => {
+  //       //         console.error('Error saving updated document:', saveError);
+  //       //       });
+  //     }
+
+  //   })  
+  //   .catch(err => {
+  //   });
+  Tutorial.findOne({PSCode:req.body.PSCode})
     .then(data => {
       if (!data) {
         console.log(data);
         res.status(404).send({
           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
         });
+        
+      
       } else {
-        res.send({ message: "Tutorial was updated successfully." });
+        // res.send({ message: "Tutorial was updated successfully." });
+
         summary.findOneAndUpdate({Constituency: data.Constituency},{ $setOnInsert: { 
           Country:data.Country,
-          Region: data.Region, 
+          Region: data.Region,
           District: data.District,
           Constituency: data.Constituency,
         } }, { upsert: true, new: true }, (error, summary) => {
@@ -74,6 +323,7 @@ exports.update = (req, res) => {
             console.error('Error finding document:', error);
             return;
           }
+          res.send({ message: "Fine was updated successfully." });
           const candidates = [];
           const names = [];
         //      console.log(req.body.TableData);
@@ -106,6 +356,10 @@ exports.update = (req, res) => {
             }
             else
               val= '0';
+        
+         
+        //        console.log(candidate);
+        
             if (candidate !== null && candidate !== "") {
                 candidates.push(candidate);
                 names.push(val);  
@@ -125,14 +379,31 @@ exports.update = (req, res) => {
                 summary.CandiDate.push(candidate);
                 summary.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary.PartyData.push({name: candidate, value: party_val});
-                summary.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary.Sum)) * 100).toFixed(2)});
+                summary.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary.Sum)) * 100});
+        
+               // console.log(candidate);
               }          
             }
-
+            // console.log(summary);
+        
           }
+        
+          // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
+        
+          // if (index !== -1) {
+          //   // If the value is found in the PartyData array
+          //   // Update the VoteCount value for the corresponding index
+          //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
+          // } else {
+          //   // If the value is not found in the PartyData array, push new data
+          //   summary.PartyData.push(PartyDataFind);
+          //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
+          // }
             summary.save()
               .then(savedSummary => {
                 console.log('Document updated:', savedSummary);
+        
+                
               })
               .catch(saveError => {
                 console.error('Error saving updated document:', saveError);
@@ -165,6 +436,7 @@ exports.update = (req, res) => {
               let valful = parseInt(table[i][3]);
               console.log(valful);
               summary_region.Sum  = summary_region.Sum + parseInt(valful);
+         
              }
              else
              {
@@ -181,6 +453,10 @@ exports.update = (req, res) => {
             }
             else
               val= '0';
+        
+         
+        //        console.log(candidate);
+        
             if (candidate !== null && candidate !== "") {
                 candidates.push(candidate);
                 names.push(val);  
@@ -194,18 +470,37 @@ exports.update = (req, res) => {
               }
               else
               {
+             
                 console.log(val);
                 console.log(summary_region.Sum);   
                 summary_region.CandiDate.push(candidate);
                 summary_region.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary_region.PartyData.push({name: candidate, value: party_val});
-                summary_region.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary_region.Sum)) * 100).toFixed(2)});
+                summary_region.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary_region.Sum)) * 100});
+        
+               // console.log(candidate);
               }          
             }
+            // console.log(summary);
+        
           }
+        
+          // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
+        
+          // if (index !== -1) {
+          //   // If the value is found in the PartyData array
+          //   // Update the VoteCount value for the corresponding index
+          //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
+          // } else {
+          //   // If the value is not found in the PartyData array, push new data
+          //   summary.PartyData.push(PartyDataFind);
+          //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
+          // }
           summary_region.save()
               .then(savedSummary => {
-                console.log('Document updated:', savedSummary);   
+                console.log('Document updated:', savedSummary);
+        
+                
               })
               .catch(saveError => {
                 console.error('Error saving updated document:', saveError);
@@ -225,9 +520,11 @@ exports.update = (req, res) => {
           }
           const candidates = [];
           const names = [];
+        //      console.log(req.body.TableData);
+          // const table = JSON.parse(req.body.TableData);
           const {TableData} = req.body;
+
           const table=TableData;
-                
           let sum_me = parseInt(summary_nation.Sum);
           for (let i = 1; i <= 8; i++) {
             let valful= 0;
@@ -236,6 +533,7 @@ exports.update = (req, res) => {
               let valful = parseInt(table[i][3]);
               console.log(valful);
               summary_nation.Sum  = summary_nation.Sum + parseInt(valful);
+         
              }
              else
              {
@@ -252,10 +550,14 @@ exports.update = (req, res) => {
             }
             else
               val= '0';
-    
+        
+         
+        //        console.log(candidate);
+        
             if (candidate !== null && candidate !== "") {
-              candidates.push(candidate);
-              names.push(val);  
+                candidates.push(candidate);
+                names.push(val);  
+        
               const voteCountIndex = summary_nation.VoteCount.findIndex((obj) => obj.name === candidate);
               if (voteCountIndex !== -1) {
                 
@@ -265,18 +567,32 @@ exports.update = (req, res) => {
               }
               else
               {
+             
                 console.log(val);
                 console.log(summary_nation.Sum);   
                 summary_nation.CandiDate.push(candidate);
                 summary_nation.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary_nation.PartyData.push({name: candidate, value: party_val});
-                summary_nation.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary_nation.Sum)) * 100).toFixed(2)});
+                summary_nation.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary_nation.Sum)) * 100});
+        
+               // console.log(candidate);
               }          
             }
             // console.log(summary);
         
           }
         
+          // const index = summary.PartyData.findIndex(item => item === PartyDataFind); // Find the index of PartyData matching the desired value
+        
+          // if (index !== -1) {
+          //   // If the value is found in the PartyData array
+          //   // Update the VoteCount value for the corresponding index
+          //   summary.VoteCount[index] = newValue; // Replace `newValue` with the desired value you want set for VoteCount
+          // } else {
+          //   // If the value is not found in the PartyData array, push new data
+          //   summary.PartyData.push(PartyDataFind);
+          //   summary.VoteCount.push(newValue); // Replace `newValue` with the desired value you want to push for VoteCount
+          // }
           summary_nation.save()
               .then(savedSummary => {
                 console.log('Document updated:', savedSummary);
@@ -287,21 +603,19 @@ exports.update = (req, res) => {
               });
         
         });
-                  // res.send({ message: "Fine was updated successfully." });
 
-        // Tutorial.save()
-        //       .then(savedSummary => {
-        //         console.log('Document updated:', savedSummary);
-        
-        //       })
-        //       .catch(saveError => {
-        //         console.error('Error saving updated document:', saveError);
-        //       });
       }
 
     })  
     .catch(err => {
+      // res.status(500).send({
+      //   message: "Error updating Tutorial with id=" + id
+      // });
     });
+
+
+
+
 };
 
 // Delete a Tutorial with the specified id in the request
