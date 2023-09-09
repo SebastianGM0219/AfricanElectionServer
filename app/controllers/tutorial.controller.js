@@ -126,8 +126,7 @@ exports.update = (req, res) => {
                 summary.CandiDate.push(candidate);
                 summary.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary.PartyData.push({name: candidate, value: party_val});
-                summary.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary.Sum)) * 100});
-
+                summary.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary.Sum)) * 100).toFixed(2)});
               }          
             }
 
@@ -201,7 +200,7 @@ exports.update = (req, res) => {
                 summary_region.CandiDate.push(candidate);
                 summary_region.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary_region.PartyData.push({name: candidate, value: party_val});
-                summary_region.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary_region.Sum)) * 100});
+                summary_region.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary_region.Sum)) * 100).toFixed(2)});
               }          
             }
           }
@@ -271,7 +270,7 @@ exports.update = (req, res) => {
                 summary_nation.CandiDate.push(candidate);
                 summary_nation.VoteCount.push({name: candidate, value: parseInt(val)});
                 summary_nation.PartyData.push({name: candidate, value: party_val});
-                summary_nation.Percent.push({name: candidate, value: (parseInt(val)/parseFloat(summary_nation.Sum)) * 100});
+                summary_nation.Percent.push({name: candidate, value: ((parseInt(val)/parseFloat(summary_nation.Sum)) * 100).toFixed(2)});
               }          
             }
             // console.log(summary);
