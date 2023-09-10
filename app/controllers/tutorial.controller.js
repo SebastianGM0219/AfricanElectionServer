@@ -525,7 +525,6 @@ exports.update = (req, res) => {
             
             if (!isNaN(table[i][3])) {
                val = table[i][3];
-               count=i; 
             }
             else
               val= '0';
