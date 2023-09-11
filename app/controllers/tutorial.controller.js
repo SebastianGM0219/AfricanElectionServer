@@ -381,6 +381,7 @@ exports.update = (req, res) => {
                 console.log(voteCountIndex);
                 console.log(names);
                 summary.VoteCount[voteCountIndex].value = parseInt(summary.VoteCount[voteCountIndex].value) + parseInt(val);
+                summary.Percent[voteCountIndex].value = ((parseInt(summary.VoteCount[voteCountIndex].value)/parseFloat(summary.Sum)) * 100).toFixed(2);
               }
               else
               {
@@ -462,6 +463,9 @@ exports.update = (req, res) => {
                 console.log(voteCountIndex);
                 console.log(names);
                 summary_region.VoteCount[voteCountIndex].value = parseInt(summary_region.VoteCount[voteCountIndex].value) + parseInt(val);
+                // summary_region.VoteCount[voteCountIndex].value = parseInt(summary_region.VoteCount[voteCountIndex].value) + parseInt(val);
+                summary_region.Percent[voteCountIndex].value = ((parseInt(summary_region.VoteCount[voteCountIndex].value)/parseFloat(summary_region.Sum)) * 100).toFixed(2);
+
               }
               else
               {
@@ -537,6 +541,8 @@ exports.update = (req, res) => {
                 console.log(voteCountIndex);
                 console.log(names);
                 summary_nation.VoteCount[voteCountIndex].value = parseInt(summary_nation.VoteCount[voteCountIndex].value) + parseInt(val);
+                summary_nation.Percent[voteCountIndex].value = ((parseInt(summary_nation.VoteCount[voteCountIndex].value)/parseFloat(summary_nation.Sum)) * 100).toFixed(2);
+                
               }
               else
               {
