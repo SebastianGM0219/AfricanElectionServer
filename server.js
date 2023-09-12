@@ -59,38 +59,38 @@ db.mongoose
   .then(() => {
     console.log("Connected to the database!");
 
-      var list= new Array();
-    fs.createReadStream('Elections App1.csv')
-    .pipe(parse({delimiter: ':'}))
-    .on('data', (row) => {
-      list.push(row)
-      // console.log(row);
-    })
-    .on('end', () => {
-      console.log('CSV file successfully processed');
-      //  console.log(list)
-      for (var i in list) {
-        var str= list[i].toString();
+    //   var list= new Array();
+    // fs.createReadStream('Elections App1.csv')
+    // .pipe(parse({delimiter: ':'}))
+    // .on('data', (row) => {
+    //   list.push(row)
+    //   // console.log(row);
+    // })
+    // .on('end', () => {
+    //   console.log('CSV file successfully processed');
+    //   //  console.log(list)
+    //   for (var i in list) {
+    //     var str= list[i].toString();
 
-        var res= str.split(",")
-        //const post= new Post();
+    //     var res= str.split(",")
+    //     //const post= new Post();
 
 
-          const tutorial = new Tutorial({
-            PSCode: res[0].trimStart(),
-            PSName: res[1].trimStart(),
-            Country: res[2].trimStart(),
-            Region: res[3].trimStart(),
-            District: res[4].trimStart(),          
-            Constituency: res[5].trimStart(),
-          });
+    //       const tutorial = new Tutorial({
+    //         PSCode: res[0].trimStart(),
+    //         PSName: res[1].trimStart(),
+    //         Country: res[2].trimStart(),
+    //         Region: res[3].trimStart(),
+    //         District: res[4].trimStart(),          
+    //         Constituency: res[5].trimStart(),
+    //       });
                 
-          // console.log(tutorial);
-          // Savze Tutorial in the database
-          tutorial
-            .save(tutorial);
-        }
-    });
+    //       // console.log(tutorial);
+    //       // Savze Tutorial in the database
+    //       tutorial
+    //         .save(tutorial);
+    //     }
+    // });
   
   })
   .catch(err => {
