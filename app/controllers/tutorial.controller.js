@@ -5,6 +5,8 @@ const summary = db.summary;
 const summary_region = db.summary_region;
 const summary_nation = db.summary_nation;
 const CandidateNames = db.candidate_name;
+const ElectionNames = db.election_name;
+
 const fs = require('fs');
 const {parse} = require('csv-parse');
 var csv = require("fast-csv");
@@ -812,6 +814,71 @@ exports.findAllPublished = (req, res) => {
     });
 };
 
+exports.findSearch_state = (req, res) => {
+  console.log("API Request =========================================> FindSearch");
+  const pageSize = 10; // Number of items to retrieve in each page
+  const currentPage = req.body.Page || 1; // Get the requested page number from the query parameter
+  console.log(req.body.Page);
+  console.log(req.body.Region);
+  console.log(req.body.Constituency);
+  console.log(req.body.Page);
+  console.log(req.body.Region);
+  console.log(req.body.Constituency);
+  let val = [];
+  let promises = [];
+  if (req.body.Constituency) {
+    // Push the promise to retrieve the summary into the promises array
+    promises.push(
+      summary.findOne({ Constituency: req.body.Constituency })
+        .then(item => {
+          val[0] = item;
+          console.log(item);
+        })
+        .catch(err => {
+          throw new Error(err.message || "Some error occurred while retrieving tutorials.");
+        })
+    );
+  }
+  
+  if (req.body.Region) {
+    promises.push(
+      summary_region.findOne({ Region: req.body.Region })
+        .then(item => {
+          val[1] = item;
+          console.log(item);
+        })
+        .catch(err => {
+          throw new Error(err.message || "Some error occurred while retrieving tutorials.");
+        })
+    );
+  }
+  
+  if (req.body.Country) {
+    promises.push(
+      summary_nation.findOne({ Country: req.body.Country })
+        .then(item => {
+          val[2] = item;
+          console.log(item);
+        })
+        .catch(err => {
+          throw new Error(err.message || "Some error occurred while retrieving tutorials.");
+        })
+    );
+  }
+  // Await all promises to resolve using Promise.all
+  Promise.all(promises)
+    .then(() => {
+      // Send the response with the populated val array
+      res.send(val);
+    })
+    .catch(err => {
+      // Handle any errors that occurred during the promises
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+};
+
 exports.findSearch = (req, res) => {
   console.log("API Request =========================================> FindSearch");
   const pageSize = 10; // Number of items to retrieve in each page
@@ -934,4 +1001,46 @@ exports.search_party = (req, res) => {
         err.message || "Some error occurred while retrieving tutorials."
     });
   });
+};
+
+exports.search_election_bystate = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
+  console.log(req.body.Election_Size);
+  //Election_type: req.body.Election_type, Election_Size:req.body.Election_Size, 
+  var searchOption = {
+  }
+  console.log(req.body.Comment);
+  if(req.body.Comment != null) searchOption.Content=  { $regex: `.*${req.body.Comment}.*` };
+  if(req.body.Election_type != null) searchOption.Election_type = req.body.Election_type;
+  if(req.body.Election_Size != null) searchOption.Election_Size = req.body.Election_Size;
+  
+  ElectionNames.find(searchOption).then(data => {
+    console.log(data);
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving tutorials."
+    });
+  });
+
+  // Tutorial.find({PSName: { $regex: req.body.PSName, $options: "i" }})
+  // .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
+  // .skip((currentPage - 1) * pageSize) // Skip the appropriate number of items based on the page number
+  // .limit(pageSize) // Retrieve only the desired number of items
+  // .then(data => {
+  //   const newData = data.map(item => {
+  //     console.log(item);
+  //     return {
+  //       PSName: item.PSName,
+  //     };
+  //   });
+  //   res.send(newData);
+  // })
+  // .catch(err => {
+  //   res.status(500).send({
+  //     message: err.message || "Some error occurred while retrieving tutorials."
+  //   });
+  // });
 };

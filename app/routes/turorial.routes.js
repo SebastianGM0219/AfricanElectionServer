@@ -20,6 +20,8 @@ router.route('/search_PSName')
 router.route('/search_psCode')
    .post(tutorials.search_psCode)
 
+router.route('/search_election_bystate/')
+   .post(tutorials.search_election_bystate)
    
 // router.route('/search_Pscode')
 //    .post(tutorials.search_pscode)
