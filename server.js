@@ -21,7 +21,7 @@ const Tutorial = db.tutorials;
 // const cookieParser = require("cookie-parser");
 // const compress = require("compression");
 // const methodOverride = require("method-override");
-// const cors = require("cors");
+ const cors = require("cors");
 // const helmet = require("helmet");
 
 // parse body params and attache them to req.body
@@ -42,7 +42,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(helmet());
 
 // // enable CORS - Cross Origin Resource Sharing
-// app.use(cors());
+ app.use(cors());
 
 
 // // parse requests of content-type - application/json
