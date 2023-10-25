@@ -63,6 +63,9 @@ router.route('/search_candidate')
 router.route('/search_partybynames')
    .post(tutorials.search_party)  
 
+router.route('/search_news')
+   .post(tutorials.search_news)  
+
 //  router.route('/:id')
 //   .post(tutorials.findOne)
 

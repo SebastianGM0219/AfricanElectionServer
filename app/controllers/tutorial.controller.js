@@ -1044,3 +1044,71 @@ exports.search_election_bystate = (req, res) => {
   //   });
   // });
 };
+
+
+exports.search_news = (req, res) => {
+  console.log("API Request =========================================> FindAllPublished");
+  //Election_type: req.body.Election_type, Election_Size:req.body.Election_Size, 
+  
+  const SerpApi = require("google-search-results-nodejs");
+  const search = new SerpApi.GoogleSearch("fbdceb1b9452e23032072df38bb328e1993a4b69c7c2c8804fe7813d7974139f");        //your API key from serpapi.com
+  
+  const searchString = "African democracy voting party presidential elections";                        // what we want to search
+  
+  const params = {
+    engine: "google",                                     // search engine
+    q: searchString,                                      // search query
+    google_domain: "google.com",                          // google domain: google.com, google.de, google.fr
+    gl: "us",                                             // parameter defines the country to use for the Google search
+    hl: "en",                                             // Parameter defines the language to use for the Google search
+    tbm: "nws"                                            // parameter defines the type of search you want to do ("nws" means news)
+  };
+  
+  const getNewsData = function ({ news_results }) {
+    return news_results.map((result) => {
+      const { link, title, source, date, snippet, thumbnail: image = "No image" } = result;
+      return {
+        link,
+        source,
+        title: title.replace('\n', ''),
+        snippet: snippet.replace('\n', ''),
+        image,
+        date,
+      }
+    })
+  };
+  
+  const getJson = (params) => {
+    return new Promise((resolve) => {
+      search.json(params, resolve);
+    })
+  }
+  
+  getJson(params)
+  .then(getNewsData)
+  .then((newsData) => {
+    res.send(newsData);
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).send('An error occurred');
+  });  // Tutorial.find({PSName: { $regex: req.body.PSName, $options: "i" }})
+  // .sort({ PSCode: 1 }) // Sort the data by the PSCode property in ascending order
+  // .skip((currentPage - 1) * pageSize) // Skip the appropriate number of items based on the page number
+  // .limit(pageSize) // Retrieve only the desired number of items
+  // .then(data => {
+  //   const newData = data.map(item => {
+  //     console.log(item);
+  //     return {
+  //       PSName: item.PSName,
+  //     };
+  //   });
+  //   res.send(newData);
+  // })
+  // .catch(err => {
+  //   res.status(500).send({
+  //     message: err.message || "Some error occurred while retrieving tutorials."
+  //   });
+  // });
+};
+
