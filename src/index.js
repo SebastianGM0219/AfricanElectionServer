@@ -101,7 +101,7 @@ db.mongoose
 
 // simple route
 app.get("/", (req, res) => {
-  console.log("REQUEST");
+  console.log("REQUEST:", req);
   res.json({ message: "Welcome to bezkoder application." });
 });
 
