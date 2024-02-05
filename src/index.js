@@ -118,7 +118,7 @@ app.get("/", (req, res) => {
 //   }});
   //create a server object:
 // router.use("/", routes);
-app.use("/", routes);
+// app.use("/", routes);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 443;
