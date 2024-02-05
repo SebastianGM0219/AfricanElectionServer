@@ -1005,17 +1005,18 @@ exports.search_party = (req, res) => {
 
 exports.search_election_bystate = (req, res) => {
   console.log("API Request =========================================> FindAllPublished");
-  console.log(req.body.Election_Size);
+  console.log(req.body.Election_size);
   //Election_type: req.body.Election_type, Election_Size:req.body.Election_Size, 
   var searchOption = {
   }
-  console.log(req.body.Comment);
+  console.log(req.body);
   if(req.body.Comment != null) searchOption.Content=  { $regex: `.*${req.body.Comment}.*` };
-  if(req.body.Election_type != null) searchOption.Election_type = req.body.Election_type;
-  if(req.body.Election_Size != null) searchOption.Election_Size = req.body.Election_Size;
-  
+  if(req.body.Election_type != null) searchOption.Election_type = {$in: req.body.Election_type};
+  if(req.body.Election_size != null) searchOption.Election_size = {$in: req.body.Election_size};
+
+  console.log(searchOption);
   ElectionNames.find(searchOption).then(data => {
-    console.log(data);
+    // console.log(data);
     res.send(data);
   })
   .catch(err => {

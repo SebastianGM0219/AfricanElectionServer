@@ -6,7 +6,7 @@ module.exports = mongoose => {
       Name: { type: String, default: null },
       Content: { type: String, default: null },
       Date: { type: String, default: null },
-      Election_Size: { type: String, default: null },
+      Election_size: { type: String, default: null },
       Election_type: { type: String, default: null },
       Link: { type: String, default: null },
     },
