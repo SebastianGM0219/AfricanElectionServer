@@ -49,7 +49,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(express.json());
 
 // // parse requests of content-type - application/x-www-form-urlencoded
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 db.mongoose
   .connect(db.url, {
@@ -127,9 +127,9 @@ const parameters = {
   cert: cert
 }
 let server = https.createServer(parameters,app)
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}.`);
-// });
-server.listen(PORT,()=>{
-  console.log(`Server is listening at port ${PORT}`)
-})
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
+// server.listen(PORT,()=>{
+//   console.log(`Server is listening at port ${PORT}`)
+// })
