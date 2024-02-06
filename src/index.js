@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
  const router = express.Router();
-const routes = require("./routes/turorial.routes");
+const routes = require("./routes/index");
 const conn_str = "mongodb+srv://father:Showlightning123@cluster0.rpclhi3.mongodb.net/?retryWrites=true&w=majority";
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -101,10 +101,10 @@ db.mongoose
 
 // simple route
 app.get("/", (req, res) => {
-  console.log("REQUEST");
+  console.log("REQUEST:", req);
   res.json({ message: "Welcome to bezkoder application." });
 });
-
+app.use(require('./routes/index'));
 // mongoose.connect(
 //   conn_str,
 //   { 
@@ -118,7 +118,7 @@ app.get("/", (req, res) => {
 //   }});
   //create a server object:
 // router.use("/", routes);
-app.use("/", routes);
+// app.use("/", routes);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 443;
