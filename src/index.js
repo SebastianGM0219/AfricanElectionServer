@@ -1,23 +1,23 @@
 const express = require("express");
 const app = express();
- const router = express.Router();
-const routes = require("./routes/index");
-const conn_str = "mongodb+srv://father:Showlightning123@cluster0.rpclhi3.mongodb.net/?retryWrites=true&w=majority";
-const mongoose = require("mongoose");
+// const router = express.Router();
+//const routes = require("./routes/index");
+//const conn_str = "mongodb+srv://father:Showlightning123@cluster0.rpclhi3.mongodb.net/?retryWrites=true&w=majority";
+//const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
-const https = require('https');
-const fs = require('fs');
-// let key = fs.readFileSync(__dirname+'/tutorial.key','utf-8');
-// let cert = fs.readFileSync(__dirname+'/tutorial.crt','utf-8');
+// const https = require('https');
+// const fs = require('fs');
+// // let key = fs.readFileSync(__dirname+'/tutorial.key','utf-8');
+// // let cert = fs.readFileSync(__dirname+'/tutorial.crt','utf-8');
 
-const {parse} = require('csv-parse');
-var csv = require("fast-csv");
-var stream = fs.createReadStream('Elections App1.csv');
+// const {parse} = require('csv-parse');
+// var csv = require("fast-csv");
+// var stream = fs.createReadStream('Elections App1.csv');
 
 const db = require("./models");
-const axios = require('axios');
-const Tutorial = db.tutorials;
+//const axios = require('axios');
+//const Tutorial = db.tutorials;
 // const cookieParser = require("cookie-parser");
 // const compress = require("compression");
 // const methodOverride = require("method-override");
