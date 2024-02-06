@@ -1,5 +1,5 @@
 const db = require("../models");
-const axios = require('axios');
+//const axios = require('axios');
 const Tutorial = db.tutorials;
 const summary = db.summary;
 const summary_region = db.summary_region;
@@ -7,13 +7,13 @@ const summary_nation = db.summary_nation;
 const CandidateNames = db.candidate_name;
 const ElectionNames = db.election_name;
 
-const fs = require('fs');
-const {parse} = require('csv-parse');
-var csv = require("fast-csv");
-const summary_regionModel = require("../models/summary_region.model");
-var stream = fs.createReadStream('Elections App1.csv');
-let lastUpdated;
-let page = 0;
+//const fs = require('fs');
+// const {parse} = require('csv-parse');
+// var csv = require("fast-csv");
+// const summary_regionModel = require("../models/summary_region.model");
+// var stream = fs.createReadStream('Elections App1.csv');
+// let lastUpdated;
+// let page = 0;
 
 exports.create = (req, res) => {
   console.log("API Request =========================================> Create");
