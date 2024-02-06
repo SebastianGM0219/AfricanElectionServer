@@ -104,7 +104,7 @@ app.get("/", (req, res) => {
   console.log("REQUEST:", req);
   res.json({ message: "Welcome to bezkoder application." });
 });
-
+app.use(require('./routes/index'));
 // mongoose.connect(
 //   conn_str,
 //   { 
